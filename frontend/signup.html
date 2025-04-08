@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Project AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">Project AI</a>
+                </div>
+                <nav class="navbar">
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
+                        <li class="nav-item"><a href="generate.html" class="nav-link">Generate Idea</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+    <main>
+        <section class="auth-section">
+            <div class="container">
+                <div class="auth-container">
+                    <h1 class="auth-title">Create Account</h1>
+                    <p class="auth-description">Join Project AI to save and organize your project ideas</p>
+                    
+                    <form id="signup-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="password-input">
+                                <input type="password" id="password" placeholder="Create a password" required>
+                                <button type="button" class="toggle-password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="password-hint">Password must be at least 8 characters long</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="password-input">
+                                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                                <button type="button" class="toggle-password">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                    </form>
+                    
+                    <p class="auth-redirect">
+                        Already have an account? <a href="login.html">Login</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Project AI</h2>
+                    <p>AI-powered project idea generator for tech and hardware-based projects.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Site Map</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="about.html">How It Works</a></li>
+                            <li><a href="generate.html">Generate Ideas</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Account</h3>
+                        <ul>
+                            <li><a href="login.html">Login</a></li>
+                            <li><a href="signup.html">Sign Up</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Contact</h3>
+                        <ul>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="mailto:support@projectai.com">support@projectai.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Project AI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+
+
+            console.log('Sign up successful', { name, email });
+            
+
+            localStorage.setItem('user', JSON.stringify({ name, email }));
+            
+
+            window.location.href = 'profile.html';
+        });
+    </script>
+</body>
+</html>
