@@ -93,7 +93,7 @@ Since **OpenAI is costly**, we’ll do this:
 │   ├── services/
 │   ├── prisma/
 │   ├── utils/
-│   └── index.ts
+│   └── index.js
 ├── .env
 ├── tsconfig.json
 ├── package.json
