@@ -5,7 +5,7 @@
 ---
 
 ### *📁 Project Area:*  
-*Artificial Intelligence, *Web Development*, *Educational Tools*
+*Artificial Intelligence*, *Web Development*, *Educational Tools*
 
 ---
 
