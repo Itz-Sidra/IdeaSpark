@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="../css/signup.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/login.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,20 +37,14 @@
         </div>
     </header>
 
-
     <main>
         <section class="auth-section">
             <div class="container">
                 <div class="auth-container">
-                    <h1 class="auth-title">Create Account</h1>
-                    <p class="auth-description">Join Project AI to save and organize your project ideas</p>
+                    <h1 class="auth-title">Login</h1>
+                    <p class="auth-description">Welcome back! Log in to access your saved ideas.</p>
                     
-                    <form id="signup-form" class="auth-form">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" placeholder="Enter your full name" required>
-                        </div>
-                        
+                    <form id="login-form" class="auth-form">
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" id="email" placeholder="Enter your email" required>
@@ -59,35 +53,23 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <div class="password-input">
-                                <input type="password" id="password" placeholder="Create a password" required>
-                                <button type="button" class="toggle-password">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </div>
-                            <small class="password-hint">Password must be at least 8 characters long</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <div class="password-input">
-                                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                                <input type="password" id="password" placeholder="Enter your password" required>
                                 <button type="button" class="toggle-password">
                                     <i class="fa-solid fa-eye"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
                     </form>
                     
                     <p class="auth-redirect">
-                        Already have an account? <a href="login.html">Login</a>
+                        Don’t have an account? <a href="signup.html">Sign Up</a>
                     </p>
                 </div>
             </div>
         </section>
     </main>
-
 
     <footer class="footer">
         <div class="container">
@@ -134,12 +116,11 @@
 
     <script src="js/main.js"></script>
     <script>
-
         document.querySelectorAll('.toggle-password').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const input = this.previousElementSibling;
                 const icon = this.querySelector('i');
-                
+
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.classList.remove('fa-eye');
@@ -151,36 +132,22 @@
                 }
             });
         });
-        
 
-        document.getElementById('signup-form').addEventListener('submit', function(e) {
+        document.getElementById('login-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
-            const name = document.getElementById('name').value;
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
 
-            if (password.length < 8) {
-                alert('Password must be at least 8 characters long');
-                return;
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (user && user.email === email) {
+                // Note: This is basic login logic, not secure for production use
+                alert('Login successful!');
+                window.location.href = 'profile.html';
+            } else {
+                alert('Invalid credentials');
             }
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-            
-
-
-            console.log('Sign up successful', { name, email });
-            
-
-            localStorage.setItem('user', JSON.stringify({ name, email }));
-            
-
-            window.location.href = 'profile.html';
         });
     </script>
 </body>
