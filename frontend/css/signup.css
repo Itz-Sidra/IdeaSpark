@@ -23,7 +23,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 2rem;
 }
+.logo {
+    flex-shrink: 0;
+}
+
 .logo a {
     font-size: 1.5rem;
     font-weight: 600;
@@ -35,6 +40,7 @@ body {
     display: flex;
     gap: 1.5rem;
     list-style: none;
+    margin-left: auto;
 }
 
 .nav-link {
