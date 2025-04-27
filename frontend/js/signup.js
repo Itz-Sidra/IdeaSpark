@@ -17,25 +17,36 @@ document.getElementById('signup-form').addEventListener('submit', async function
         return;
     }
 
-    // Send a POST request to the backend API
-    const response = await fetch('http://localhost:5000/api/auth/signup', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            name: name,
-            email: email,
-            password: password,
-        }),
-    });
+    console.log('Attempting signup for:', email);
 
-    const data = await response.json();
+    try {
+        // Send a POST request to the backend API
+        const response = await fetch('http://localhost:5000/api/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+            }),
+            // credentials: 'include' // Include cookies for cookie-based auth
+        });
 
-    if (response.ok) {
-        alert('Sign up successful! Please log in.');
-        window.location.href = 'login.html'; // Redirect to login page after successful signup
-    } else {
-        alert(`Error: ${data.error}`); // Error handling
+        console.log('Response status:', response.status);
+        
+        const data = await response.json();
+        console.log('Signup Response:', data);
+
+        if (response.ok) {
+            alert('Sign up successful! Please log in.');
+            window.location.href = 'login.html';
+        } else {
+            alert(`Error: ${data.error || 'Could not create account'}`);
+        }
+    } catch (error) {
+        console.error('Signup Error:', error);
+        alert('An error occurred: ' + error.message);
     }
 });
