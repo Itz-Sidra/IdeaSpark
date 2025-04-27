@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "**Project:** *AI-Powered Problem Statement Generator*  \r **Mode:** MVP (Minimum Viable Product)  \r **Stack:** Node.js (Express), JavaScript, Prisma ORM, PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "prisma": "^6.6.0"
+  }
+}
