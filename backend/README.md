@@ -98,6 +98,21 @@ Since **OpenAI is costly**, we’ll do this:
 ├── tsconfig.json
 ├── package.json
 └── README.md
+
+src/
+│
+├── controllers/          # Contains business logic
+│   └── auth.controller.js   # Signup, login logic
+│
+├── middlewares/          # Contains middleware (e.g., authentication checks)
+│   └── auth.middleware.js   # Check for valid JWT
+│
+├── routes/               # Contains route definitions
+│   └── auth.routes.js     # Defines routes for signup/login
+│
+├── server.js             # Main entry point to initialize the app
+│
+└── .env                  # Store environment variables (DB URL, JWT secret, etc.)
 ```
 
 ---
