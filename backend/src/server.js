@@ -1,23 +1,38 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Import cors
-const authRoutes = require('./routes/auth.routes'); // Import auth routes
-require('dotenv').config(); // Load environment variables from .env file
+const cors = require('cors');
+const authRoutes = require('./routes/auth.routes');
+require('dotenv').config();
 
 const app = express();
 
-// Enable CORS for all origins (or you can specify specific origins if needed)
-app.use(cors());
+// Configure CORS with specific options
+app.use(cors({
+  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware for parsing JSON requests
-app.use(bodyParser.json());
+app.use(express.json());
+// app.use(bodyParser.json());
 
 // Use authentication routes
 app.use('/api/auth', authRoutes);
 
-const port = process.env.PORT || 5000; // Use PORT from .env or fallback to 5000
+// Basic route for testing
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'Server is healthy' });
+});
+
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Connection successful!' });
+});
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
-  console.log('DATABASE_URL:', process.env.DATABASE_URL); // Debugging line
 });
