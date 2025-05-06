@@ -25,10 +25,12 @@
                         <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
                         <li class="nav-item"><a href="generate.html" class="nav-link">Generate Idea</a></li>
                         <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-                        <li class="nav-item logged-out auth-status"><a href="login.html" class="nav-link">Login</a></li>
-                        <li class="nav-item logged-out auth-status"><a href="signup.html" class="nav-link">Sign Up</a></li>
+                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile</a></li>
+
+                        <!--
                         <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile (<span class="username">User</span>)</a></li>
-                        <li class="nav-item logged-in auth-status"><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+                        -->
+                        
                     </ul>
                     <div class="hamburger">
                         <span class="bar"></span>
@@ -47,15 +49,15 @@
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
-                        <h1 class="hero-title">Generate Innovative Tech Project Ideas</h1>
-                        <p class="hero-description">Get tailored project suggestions for your next hardware or software development challenge. Perfect for students, hobbyists, and professionals.</p>
+                        <h1 class="hero-title">Generate Innovative Project Ideas</h1>
+                        <p class="hero-description">Get project suggestions for your next hardware or software development challenge. Perfect for students, hobbyists, and professionals.</p>
                         <div class="hero-buttons">
                             <a href="generate.html" class="btn btn-primary">Generate Ideas</a>
                             <a href="#how-it-works" class="btn btn-outline">Learn More</a>
                         </div>
                     </div>
                     <div class="hero-image">
-                        <img src="img/hero-image.svg" alt="Project Idea Generator" />
+                        <img src="../assests/demo.jpg" alt="Project Idea Generator" />
                     </div>
                 </div>
             </div>
@@ -73,7 +75,7 @@
                         <div class="feature-icon">
                             <i class="fas fa-lightbulb"></i>
                         </div>
-                        <h3 class="feature-title">Tailored Ideas</h3>
+                        <h3 class="feature-title">Get Ideas</h3>
                         <p class="feature-description">Get project suggestions customized to your skills and interests</p>
                     </div>
                     <div class="feature-card">
@@ -95,123 +97,7 @@
                             <i class="fas fa-bolt"></i>
                         </div>
                         <h3 class="feature-title">Instant Generation</h3>
-                        <p class="feature-description">Get project ideas in seconds with our advanced algorithms</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- How It Works Section -->
-        <section class="how-it-works-section" id="how-it-works">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">How IdeaSpark Works</h2>
-                    <p class="section-description">Our AI-powered platform makes academic challenges easier to tackle</p>
-                </div>
-                <div class="how-it-works-grid">
-                    <div class="step-card">
-                        <div class="step-image">
-                            <img src="img/step1.svg" alt="Step 1" />
-                        </div>
-                        <h3 class="step-title">1. Choose Your Tech</h3>
-                        <p class="step-description">Select your preferred technology stack and tools</p>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-image">
-                            <img src="img/step2.svg" alt="Step 2" />
-                        </div>
-                        <h3 class="step-title">2. Set Parameters</h3>
-                        <p class="step-description">Define complexity level and project requirements</p>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-image">
-                            <img src="img/step3.svg" alt="Step 3" />
-                        </div>
-                        <h3 class="step-title">3. Review Ideas</h3>
-                        <p class="step-description">Get instantly generated project suggestions</p>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-image">
-                            <img src="img/step4.svg" alt="Step 4" />
-                        </div>
-                        <h3 class="step-title">4. Start Building</h3>
-                        <p class="step-description">Choose your favorite idea and get to work!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Example Projects Section -->
-        <section class="example-projects-section" id="example-projects">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Example Project Ideas</h2>
-                    <p class="section-description">Browse through these sample tech & hardware projects for inspiration</p>
-                </div>
-                <div class="example-projects-grid">
-                    <div class="project-card">
-                        <h3 class="project-title">IoT & Embedded Systems</h3>
-                        <p class="project-description">
-                            Develop an automated plant monitoring and care system using Arduino, soil moisture sensors, 
-                            and a water pump. Create a companion mobile app that displays plant health metrics and allows 
-                            remote watering control via Bluetooth or WiFi.
-                        </p>
-                    </div>
-                    <div class="project-card">
-                        <h3 class="project-title">Robotics & Computer Vision</h3>
-                        <p class="project-description">
-                            Build a Raspberry Pi-powered recycling sorter that uses a camera and machine learning to 
-                            identify and sort different types of recyclable materials. Implement a servo-controlled 
-                            mechanism to physically separate items into appropriate bins.
-                        </p>
-                    </div>
-                    <div class="project-card">
-                        <h3 class="project-title">Smart Health Tech</h3>
-                        <p class="project-description">
-                            Create a wearable health monitoring device using ESP32, heart rate sensor, and accelerometer 
-                            to track activity and vital signs. Develop a companion web application that visualizes health 
-                            data and provides insights using simple analytics.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Technical Examples Section -->
-        <section class="technical-examples-section" id="technical-examples">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Technical Implementation Examples</h2>
-                    <p class="section-description">See how our ideas can be transformed into real projects</p>
-                </div>
-                <div class="technical-examples-content">
-                    <div class="code-sample">
-                        <h3>Arduino Soil Moisture Sensor Code</h3>
-                        <pre><code>
-const int moisturePin = A0;
-const int pumpPin = 9;
-const int dryThreshold = 400;
-
-void setup() {
-  Serial.begin(9600);
-  pinMode(pumpPin, OUTPUT);
-  digitalWrite(pumpPin, LOW);
-}
-
-void loop() {
-  int moistureValue = analogRead(moisturePin);
-  Serial.print("Moisture level: ");
-  Serial.println(moistureValue);
-  
-  if (moistureValue &lt; dryThreshold) {
-    digitalWrite(pumpPin, HIGH);
-    delay(1000);
-    digitalWrite(pumpPin, LOW);
-  }
-  
-  delay(3600000); // Check every hour
-}
-                        </code></pre>
+                        <p class="feature-description">Get project ideas in seconds through our embedded algorithm</p>
                     </div>
                 </div>
             </div>
@@ -274,61 +160,6 @@ void loop() {
             </div>
         </section>
 
-        <!-- Pricing Section -->
-        <section class="pricing-section" id="pricing">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Simple, Transparent Pricing</h2>
-                    <p class="section-description">Choose the plan that fits your needs</p>
-                </div>
-                <div class="pricing-grid">
-                    <div class="pricing-card">
-                        <div class="pricing-header">
-                            <h3 class="pricing-title">Free</h3>
-                            <p class="pricing-price">$0<span>/month</span></p>
-                        </div>
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> 5 project ideas per month</li>
-                            <li><i class="fas fa-check"></i> Basic customization options</li>
-                            <li><i class="fas fa-check"></i> Beginner-level projects</li>
-                            <li><i class="fas fa-times"></i> Save favorite ideas</li>
-                            <li><i class="fas fa-times"></i> Advanced projects</li>
-                        </ul>
-                        <a href="signup.html" class="btn btn-outline">Get Started</a>
-                    </div>
-                    <div class="pricing-card featured">
-                        <div class="pricing-tag">Most Popular</div>
-                        <div class="pricing-header">
-                            <h3 class="pricing-title">Premium</h3>
-                            <p class="pricing-price">$9.99<span>/month</span></p>
-                        </div>
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> Unlimited project ideas</li>
-                            <li><i class="fas fa-check"></i> Advanced customization</li>
-                            <li><i class="fas fa-check"></i> All difficulty levels</li>
-                            <li><i class="fas fa-check"></i> Save unlimited ideas</li>
-                            <li><i class="fas fa-check"></i> Priority support</li>
-                        </ul>
-                        <a href="signup.html" class="btn btn-primary">Start Free Trial</a>
-                    </div>
-                    <div class="pricing-card">
-                        <div class="pricing-header">
-                            <h3 class="pricing-title">Team</h3>
-                            <p class="pricing-price">$24.99<span>/month</span></p>
-                        </div>
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> Everything in Premium</li>
-                            <li><i class="fas fa-check"></i> Up to 5 team members</li>
-                            <li><i class="fas fa-check"></i> Collaborative ideation</li>
-                            <li><i class="fas fa-check"></i> Team analytics</li>
-                            <li><i class="fas fa-check"></i> Dedicated support</li>
-                        </ul>
-                        <a href="contact.html" class="btn btn-outline">Contact Sales</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Call to Action Section -->
         <section class="cta-section">
             <div class="container">
@@ -361,8 +192,6 @@ void loop() {
                     <div class="footer-column">
                         <h3>Account</h3>
                         <ul>
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="signup.html">Sign Up</a></li>
                             <li><a href="profile.html">Profile</a></li>
                         </ul>
                     </div>
