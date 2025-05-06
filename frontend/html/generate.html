@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Project Ideas - Idea Spark</title>
+    <title>Generate Project Ideas - IdeaSpark</title>
     <meta name="description" content="Generate custom tech and hardware project ideas tailored to your skills and interests" />
     
     <!-- Fonts -->
@@ -33,10 +33,7 @@
                         <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
                         <li class="nav-item"><a href="generate.html" class="nav-link active">Generate Ideas</a></li>
                         <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-                        <li class="nav-item logged-out auth-status"><a href="login.html" class="nav-link">Login</a></li>
-                        <li class="nav-item logged-out auth-status"><a href="signup.html" class="nav-link">Sign Up</a></li>
-                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile (<span class="username">User</span>)</a></li>
-                        <li class="nav-item logged-in auth-status"><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile</a></li>
                     </ul>
                     <div class="hamburger">
                         <span class="bar"></span>
@@ -53,7 +50,7 @@
         <section class="page-hero">
             <div class="container">
                 <h1>Generate Your Project Idea</h1>
-                <p>Complete the form below to get a tailored tech project suggestion</p>
+                <p>Complete the form below to get project suggestions</p>
             </div>
         </section>
         
@@ -63,10 +60,15 @@
                     <div class="generator-form-container">
                         <form id="generator-form" class="generator-form">
                             <div class="form-header">
-                                <h2>Create Your Project Statement</h2>
-                                <p>Fill in the details below to generate a tailored tech/hardware project statement</p>
+                                <h2>Create Your Project Idea</h2>
+                                <p>Fill in the details below to generate a project idea</p>
                             </div>
                             
+                            <div class="form-group">
+                                <label for="number">Number of Ideas to be generated</label>
+                                <input type="number" id="number" class="form-input" placeholder="e.g. 1, 2, 3">
+                            </div>
+
                             <div class="form-group">
                                 <label for="tech-stack">Technology Stack</label>
                                 <select id="tech-stack" class="form-input" required>
@@ -132,7 +134,7 @@
                         <div id="result-card" class="result-card" style="display: none;">
                             <div class="result-header">
                                 <h2>Your Generated Project Idea</h2>
-                                <p>Here's a tailored tech project statement based on your inputs</p>
+                                <p>Here are some project ideas based on your inputs</p>
                             </div>
                             
                             <div class="result-content">
@@ -193,7 +195,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <h2>Idea Spark</h2>
+                    <h2>IdeaSpark</h2>
                     <p>AI-powered project idea generator for tech and hardware-based projects.</p>
                 </div>
                 
@@ -210,8 +212,6 @@
                     <div class="footer-column">
                         <h3>Account</h3>
                         <ul>
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="signup.html">Sign Up</a></li>
                             <li><a href="profile.html">Profile</a></li>
                         </ul>
                     </div>
@@ -233,178 +233,6 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="js/main.js"></script>
     <script src="js/generator.js"></script>
-    
-    <style>
-        /* Additional styles specific to the generator page */
-        .page-hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-            color: #fff;
-            padding: 60px 0;
-            text-align: center;
-        }
-        
-        .page-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-        
-        .page-hero p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
-        }
-        
-        .generator-section {
-            padding: 60px 0;
-        }
-        
-        .generator-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .generator-form {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: var(--box-shadow);
-            padding: 30px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .form-header {
-            margin-bottom: 30px;
-        }
-        
-        .form-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .form-header p {
-            color: var(--text-light);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-        
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 30px;
-        }
-        
-        .loading-spinner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: var(--box-shadow);
-            border: 1px solid var(--border-color);
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(99, 102, 241, 0.2);
-            border-top-color: var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .loading-spinner p {
-            color: var(--text-light);
-        }
-        
-        .result-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: var(--box-shadow);
-            padding: 30px;
-            border: 1px solid var(--primary-color);
-        }
-        
-        .result-header {
-            margin-bottom: 20px;
-        }
-        
-        .result-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-        
-        .result-header p {
-            color: var(--text-light);
-        }
-        
-        .result-content {
-            background-color: var(--background-alt);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .result-content p {
-            line-height: 1.6;
-        }
-        
-        .result-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 16px;
-        }
-        
-        .example-projects {
-            margin-top: 40px;
-        }
-        
-        @media (max-width: 992px) {
-            .generator-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .generator-form-container,
-            .results-container {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
-    </style>
 </body>
 </html>

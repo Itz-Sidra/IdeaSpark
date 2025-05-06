@@ -1,0 +1,93 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  body {
+    background-color: #f7f9fc;
+    color: #333;
+    padding: 20px;
+  }
+  
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  header h1 {
+    font-size: 2.5rem;
+    color: #2d3e50;
+  }
+  
+  header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  /* Steps */
+  .steps-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .step {
+    background-color: #ffffff;
+    border-left: 6px solid #007bff;
+    padding: 20px 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  
+  .step-number {
+    font-size: 1.5rem;
+    background-color: #007bff;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-weight: bold;
+  }
+  
+  .step-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    color: #2d3e50;
+  }
+  
+  .step-content p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #888;
+    font-size: 0.95rem;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 600px) {
+    .step {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .step-number {
+      margin-bottom: 10px;
+    }
+  }
+  
