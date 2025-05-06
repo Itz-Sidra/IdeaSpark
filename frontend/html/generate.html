@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Project Ideas - Idea Spark</title>
+    <meta name="description" content="Generate custom tech and hardware project ideas tailored to your skills and interests" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/generate.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">IdeaSpark</a>
+                </div>
+                <nav>
+                    <ul class="nav-menu">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
+                        <li class="nav-item"><a href="generate.html" class="nav-link active">Generate Ideas</a></li>
+                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
+                        <li class="nav-item logged-out auth-status"><a href="login.html" class="nav-link">Login</a></li>
+                        <li class="nav-item logged-out auth-status"><a href="signup.html" class="nav-link">Sign Up</a></li>
+                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile (<span class="username">User</span>)</a></li>
+                        <li class="nav-item logged-in auth-status"><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+                    </ul>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h1>Generate Your Project Idea</h1>
+                <p>Complete the form below to get a tailored tech project suggestion</p>
+            </div>
+        </section>
+        
+        <section class="generator-section">
+            <div class="container">
+                <div class="generator-container">
+                    <div class="generator-form-container">
+                        <form id="generator-form" class="generator-form">
+                            <div class="form-header">
+                                <h2>Create Your Project Statement</h2>
+                                <p>Fill in the details below to generate a tailored tech/hardware project statement</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tech-stack">Technology Stack</label>
+                                <select id="tech-stack" class="form-input" required>
+                                    <option value="" disabled selected>Select your primary technology</option>
+                                    <option value="Web Development">Web Development</option>
+                                    <option value="Mobile App">Mobile App</option>
+                                    <option value="Embedded Systems">Embedded Systems</option>
+                                    <option value="Machine Learning">Machine Learning</option>
+                                    <option value="IoT">IoT</option>
+                                    <option value="Blockchain">Blockchain</option>
+                                    <option value="Robotics">Robotics</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="hardware">Hardware Components</label>
+                                <select id="hardware" class="form-input">
+                                    <option value="" disabled selected>Select primary hardware</option>
+                                    <option value="Arduino">Arduino</option>
+                                    <option value="Raspberry Pi">Raspberry Pi</option>
+                                    <option value="ESP32/ESP8266">ESP32/ESP8266</option>
+                                    <option value="Sensors">Sensors (Various)</option>
+                                    <option value="Nvidia Jetson">Nvidia Jetson</option>
+                                    <option value="Custom PCB">Custom PCB</option>
+                                    <option value="None">None/Software Only</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="complexity">Project Complexity</label>
+                                <select id="complexity" class="form-input" required>
+                                    <option value="" disabled selected>Select complexity level</option>
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Research">Research Level</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="domain">Project Domain (Optional)</label>
+                                <input type="text" id="domain" class="form-input" placeholder="e.g. healthcare, agriculture, smart home">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="additional-info">Additional Requirements (Optional)</label>
+                                <textarea id="additional-info" class="form-input" rows="3" placeholder="Any specific requirements or constraints for your project"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="reset" class="btn btn-outline">Reset</button>
+                                <button type="submit" class="btn btn-primary">Generate Project Idea</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div id="result-container" class="results-container">
+                        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                            <p>Generating your project idea...</p>
+                        </div>
+                        
+                        <div id="result-card" class="result-card" style="display: none;">
+                            <div class="result-header">
+                                <h2>Your Generated Project Idea</h2>
+                                <p>Here's a tailored tech project statement based on your inputs</p>
+                            </div>
+                            
+                            <div class="result-content">
+                                <p id="problem-statement"></p>
+                            </div>
+                            
+                            <div class="result-actions">
+                                <button id="copy-button" class="btn btn-outline">
+                                    <i class="fas fa-copy"></i> Copy to Clipboard
+                                </button>
+                                <button id="save-button" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save to Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="example-projects">
+                    <h2 class="section-title">Example Project Ideas</h2>
+                    <p class="section-description">Browse through these sample tech & hardware projects for inspiration</p>
+                    
+                    <div class="example-projects-grid">
+                        <div class="project-card">
+                            <h3 class="project-title">IoT & Embedded Systems</h3>
+                            <p class="project-description">
+                                Develop an automated plant monitoring and care system using Arduino, soil moisture sensors, 
+                                and a water pump. Create a companion mobile app that displays plant health metrics and allows 
+                                remote watering control via Bluetooth or WiFi.
+                            </p>
+                        </div>
+                        
+                        <div class="project-card">
+                            <h3 class="project-title">Robotics & Computer Vision</h3>
+                            <p class="project-description">
+                                Build a Raspberry Pi-powered recycling sorter that uses a camera and machine learning to 
+                                identify and sort different types of recyclable materials. Implement a servo-controlled 
+                                mechanism to physically separate items into appropriate bins.
+                            </p>
+                        </div>
+                        
+                        <div class="project-card">
+                            <h3 class="project-title">Smart Health Tech</h3>
+                            <p class="project-description">
+                                Create a wearable health monitoring device using ESP32, heart rate sensor, and accelerometer 
+                                to track activity and vital signs. Develop a companion web application that visualizes health 
+                                data and provides insights using simple analytics.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Idea Spark</h2>
+                    <p>AI-powered project idea generator for tech and hardware-based projects.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h3>Site Map</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="about.html">How It Works</a></li>
+                            <li><a href="generate.html">Generate Ideas</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Account</h3>
+                        <ul>
+                            <li><a href="login.html">Login</a></li>
+                            <li><a href="signup.html">Sign Up</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h3>Contact</h3>
+                        <ul>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="mailto:support@ideaspark.com">support@ideaspark.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Idea Spark. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/generator.js"></script>
+    
+    <style>
+        /* Additional styles specific to the generator page */
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: #fff;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .page-hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .generator-section {
+            padding: 60px 0;
+        }
+        
+        .generator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .generator-form {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-header {
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--text-light);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(99, 102, 241, 0.2);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner p {
+            color: var(--text-light);
+        }
+        
+        .result-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .result-header {
+            margin-bottom: 20px;
+        }
+        
+        .result-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .result-header p {
+            color: var(--text-light);
+        }
+        
+        .result-content {
+            background-color: var(--background-alt);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .result-content p {
+            line-height: 1.6;
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+        
+        .example-projects {
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            .generator-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .generator-form-container,
+            .results-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</body>
+</html>
