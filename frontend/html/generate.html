@@ -1,243 +1,1219 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generate Project Ideas - IdeaSpark</title>
-    <meta name="description" content="Generate custom tech and hardware project ideas tailored to your skills and interests" />
-    
+    <meta
+      name="description"
+      content="Generate custom tech and hardware project ideas tailored to your skills and interests"
+    />
+
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/generate.css">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Custom Styles - Fixed paths -->
+    <link rel="stylesheet" href="../css/generate.css" />
+
+    <style>
+      /* Base Styles */
+      :root {
+        --primary-color: #6366f1;
+        --primary-hover: #4f46e5;
+        --secondary-color: #f59e0b;
+        --text-color: #333;
+        --text-light: #666;
+        --background: #fff;
+        --background-alt: #f9fafb;
+        --border-color: #e5e7eb;
+        --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --transition: all 0.3s ease;
+        --success-color: #10b981;
+        --error-color: #ef4444;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--background);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif;
+      }
+
+      a {
+        text-decoration: none;
+        color: var(--primary-color);
+        transition: var(--transition);
+      }
+
+      a:hover {
+        color: var(--primary-hover);
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header Styles */
+      .header {
+        background-color: var(--background);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+      }
+
+      .logo a {
+        font-size: 24px;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .nav-link {
+        color: var(--text-color);
+        font-weight: 500;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--primary-color);
+      }
+
+      .hamburger {
+        display: none;
+        cursor: pointer;
+      }
+
+      .bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        background-color: var(--text-color);
+        transition: var(--transition);
+      }
+
+      /* Button Styles */
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        text-align: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: #fff;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+      }
+
+      .btn-outline:hover {
+        background-color: var(--primary-color);
+        color: #fff;
+        transform: translateY(-2px);
+      }
+
+      .page-hero {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: #fff;
+        padding: 60px 0;
+        text-align: center;
+      }
+
+      .page-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+      }
+
+      .page-hero p {
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0.9;
+      }
+
+      .generator-section {
+        padding: 60px 0;
+      }
+
+      .generator-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+      }
+
+      .generator-form-container {
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .generator-form {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: var(--box-shadow);
+        padding: 30px;
+        border: 1px solid var(--border-color);
+      }
+
+      .form-header {
+        margin-bottom: 30px;
+      }
+
+      .form-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+
+      .form-header p {
+        color: var(--text-light);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .required {
+        color: var(--error-color);
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-family: "Inter", sans-serif;
+        font-size: 16px;
+        transition: var(--transition);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      }
+
+      .form-help {
+        color: var(--text-light);
+        font-size: 0.875rem;
+        margin-top: 4px;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 30px;
+      }
+
+      .results-container {
+        width: 100%;
+        max-width: 600px;
+        margin-top: 30px;
+      }
+
+      .loading-spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: var(--box-shadow);
+        border: 1px solid var(--border-color);
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(99, 102, 241, 0.2);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-spinner p {
+        color: var(--text-light);
+        margin-bottom: 8px;
+      }
+
+      .loading-spinner small {
+        color: var(--text-light);
+        opacity: 0.7;
+      }
+
+      .result-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: var(--box-shadow);
+        padding: 30px;
+        border: 1px solid var(--primary-color);
+      }
+
+      .result-header {
+        margin-bottom: 20px;
+      }
+
+      .result-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+      }
+
+      .result-header p {
+        color: var(--text-light);
+      }
+
+      .result-content {
+        background-color: var(--background-alt);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .result-content p {
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+
+      .result-content strong {
+        color: var(--primary-color);
+      }
+
+      .result-content ul {
+        margin: 16px 0;
+        padding-left: 20px;
+      }
+
+      .result-content li {
+        list-style: disc;
+        margin-bottom: 8px;
+      }
+
+      .result-content hr {
+        margin: 30px 0;
+        border: none;
+        border-top: 2px solid var(--border-color);
+      }
+
+      .result-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+
+      .example-projects {
+        margin-top: 60px;
+      }
+
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .section-description {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        text-align: center;
+      }
+
+      .example-projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .project-card {
+        background-color: var(--background-alt);
+        border-radius: 10px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--box-shadow);
+      }
+
+      .project-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+
+      .project-description {
+        color: var(--text-light);
+      }
+
+      /* Footer Styles */
+      .footer {
+        background-color: var(--background-alt);
+        padding: 60px 0 20px;
+        margin-top: 80px;
+      }
+
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      .footer-logo {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .footer-logo h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .footer-logo p {
+        color: var(--text-light);
+      }
+
+      .footer-links {
+        flex: 2;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+      }
+
+      .footer-column {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .footer-column h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
+
+      .footer-column ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-column a {
+        color: var(--text-light);
+      }
+
+      .footer-column a:hover {
+        color: var(--primary-color);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+        color: var(--text-light);
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 992px) {
+        .generator-container {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-menu {
+          position: fixed;
+          left: -100%;
+          top: 70px;
+          flex-direction: column;
+          background-color: var(--background);
+          width: 100%;
+          text-align: center;
+          transition: 0.3s;
+          box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+          padding: 20px;
+          gap: 20px;
+        }
+
+        .nav-menu.active {
+          left: 0;
+        }
+
+        .hamburger {
+          display: block;
+        }
+
+        .hamburger.active .bar:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger.active .bar:nth-child(1) {
+          transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.active .bar:nth-child(3) {
+          transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .page-hero h1 {
+          font-size: 2rem;
+        }
+
+        .form-actions {
+          flex-direction: column;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          gap: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index.html">IdeaSpark</a>
-                </div>
-                <nav>
-                    <ul class="nav-menu">
-                        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-                        <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
-                        <li class="nav-item"><a href="generate.html" class="nav-link active">Generate Idea</a></li>
-                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile</a></li>
-
-                        <!--
-                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile (<span class="username">User</span>)</a></li>
-                        -->
-                        
-                    </ul>
-                    <div class="hamburger">
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                    </div>
-                </nav>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <a href="index.html">IdeaSpark</a>
+          </div>
+          <nav>
+            <ul class="nav-menu">
+              <li class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="about.html" class="nav-link">How It Works</a>
+              </li>
+              <li class="nav-item">
+                <a href="generate.html" class="nav-link active"
+                  >Generate Idea</a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="contact.html" class="nav-link">Contact Us</a>
+              </li>
+              <li class="nav-item logged-in auth-status">
+                <a href="profile.html" class="nav-link">Profile</a>
+              </li>
+            </ul>
+            <div class="hamburger">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
             </div>
+          </nav>
         </div>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main>
-        <section class="page-hero">
-            <div class="container">
-                <h1>Generate Your Project Idea</h1>
-                <p>Complete the form below to get project suggestions</p>
-            </div>
-        </section>
-        
-        <section class="generator-section">
-            <div class="container">
-                <div class="generator-container">
-                    <div class="generator-form-container">
-                        <form id="generator-form" class="generator-form">
-                            <div class="form-header">
-                                <h2>Create Your Project Idea</h2>
-                                <p>Fill in the details below to generate a project idea</p>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="number">Number of Ideas to be generated</label>
-                                <input type="number" id="number" class="form-input" placeholder="e.g. 1, 2, 3">
-                            </div>
+      <section class="page-hero">
+        <div class="container">
+          <h1>Generate Your Project Idea</h1>
+          <p>
+            Complete the form below to get project suggestions powered by AI
+          </p>
+        </div>
+      </section>
 
-                            <div class="form-group">
-                                <label for="tech-stack">Technology Stack</label>
-                                <select id="tech-stack" class="form-input" required>
-                                    <option value="" disabled selected>Select your primary technology</option>
-                                    <option value="Web Development">Web Development</option>
-                                    <option value="Mobile App">Mobile App</option>
-                                    <option value="Embedded Systems">Embedded Systems</option>
-                                    <option value="Machine Learning">Machine Learning</option>
-                                    <option value="IoT">IoT</option>
-                                    <option value="Blockchain">Blockchain</option>
-                                    <option value="Robotics">Robotics</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="hardware">Hardware Components</label>
-                                <select id="hardware" class="form-input">
-                                    <option value="" disabled selected>Select primary hardware</option>
-                                    <option value="Arduino">Arduino</option>
-                                    <option value="Raspberry Pi">Raspberry Pi</option>
-                                    <option value="ESP32/ESP8266">ESP32/ESP8266</option>
-                                    <option value="Sensors">Sensors (Various)</option>
-                                    <option value="Nvidia Jetson">Nvidia Jetson</option>
-                                    <option value="Custom PCB">Custom PCB</option>
-                                    <option value="None">None/Software Only</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="complexity">Project Complexity</label>
-                                <select id="complexity" class="form-input" required>
-                                    <option value="" disabled selected>Select complexity level</option>
-                                    <option value="Beginner">Beginner</option>
-                                    <option value="Intermediate">Intermediate</option>
-                                    <option value="Advanced">Advanced</option>
-                                    <option value="Research">Research Level</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="domain">Project Domain (Optional)</label>
-                                <input type="text" id="domain" class="form-input" placeholder="e.g. healthcare, agriculture, smart home">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="additional-info">Additional Requirements (Optional)</label>
-                                <textarea id="additional-info" class="form-input" rows="3" placeholder="Any specific requirements or constraints for your project"></textarea>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="reset" class="btn btn-outline">Reset</button>
-                                <button type="submit" class="btn btn-primary">Generate Project Idea</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <div id="result-container" class="results-container">
-                        <div id="loading-spinner" class="loading-spinner" style="display: none;">
-                            <div class="spinner"></div>
-                            <p>Generating your project idea...</p>
-                        </div>
-                        
-                        <div id="result-card" class="result-card" style="display: none;">
-                            <div class="result-header">
-                                <h2>Your Generated Project Idea</h2>
-                                <p>Here are some project ideas based on your inputs</p>
-                            </div>
-                            
-                            <div class="result-content">
-                                <p id="problem-statement"></p>
-                            </div>
-                            
-                            <div class="result-actions">
-                                <button id="copy-button" class="btn btn-outline">
-                                    <i class="fas fa-copy"></i> Copy to Clipboard
-                                </button>
-                                <button id="save-button" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> Save to Favorites
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+      <section class="generator-section">
+        <div class="container">
+          <div class="generator-container">
+            <div class="generator-form-container">
+              <form id="generator-form" class="generator-form">
+                <div class="form-header">
+                  <h2>Create Your Project Idea</h2>
+                  <p>
+                    Fill in the details below to generate AI-powered project
+                    ideas
+                  </p>
                 </div>
-                
-                <div class="example-projects">
-                    <h2 class="section-title">Example Project Ideas</h2>
-                    <p class="section-description">Browse through these sample tech & hardware projects for inspiration</p>
-                    
-                    <div class="example-projects-grid">
-                        <div class="project-card">
-                            <h3 class="project-title">IoT & Embedded Systems</h3>
-                            <p class="project-description">
-                                Develop an automated plant monitoring and care system using Arduino, soil moisture sensors, 
-                                and a water pump. Create a companion mobile app that displays plant health metrics and allows 
-                                remote watering control via Bluetooth or WiFi.
-                            </p>
-                        </div>
-                        
-                        <div class="project-card">
-                            <h3 class="project-title">Robotics & Computer Vision</h3>
-                            <p class="project-description">
-                                Build a Raspberry Pi-powered recycling sorter that uses a camera and machine learning to 
-                                identify and sort different types of recyclable materials. Implement a servo-controlled 
-                                mechanism to physically separate items into appropriate bins.
-                            </p>
-                        </div>
-                        
-                        <div class="project-card">
-                            <h3 class="project-title">Smart Health Tech</h3>
-                            <p class="project-description">
-                                Create a wearable health monitoring device using ESP32, heart rate sensor, and accelerometer 
-                                to track activity and vital signs. Develop a companion web application that visualizes health 
-                                data and provides insights using simple analytics.
-                            </p>
-                        </div>
-                    </div>
+
+                <div class="form-group">
+                  <label for="number">Number of Ideas to Generate</label>
+                  <select id="number" class="form-input" required>
+                    <option value="" disabled selected>
+                      Select number of ideas
+                    </option>
+                    <option value="1">1 Idea</option>
+                    <option value="2">2 Ideas</option>
+                    <option value="3">3 Ideas</option>
+                    <option value="4">4 Ideas</option>
+                    <option value="5">5 Ideas</option>
+                  </select>
+                  <small class="form-help"
+                    >Choose how many project ideas you want to generate
+                    (1-5)</small
+                  >
                 </div>
+
+                <div class="form-group">
+                  <label for="tech-stack"
+                    >Technology Stack <span class="required">*</span></label
+                  >
+                  <select id="tech-stack" class="form-input" required>
+                    <option value="" disabled selected>
+                      Select your primary technology
+                    </option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Mobile App">Mobile App</option>
+                    <option value="Embedded Systems">Embedded Systems</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="IoT">IoT</option>
+                    <option value="Blockchain">Blockchain</option>
+                    <option value="Robotics">Robotics</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="hardware">Hardware Components</label>
+                  <select id="hardware" class="form-input">
+                    <option value="" disabled selected>
+                      Select primary hardware
+                    </option>
+                    <option value="Arduino">Arduino</option>
+                    <option value="Raspberry Pi">Raspberry Pi</option>
+                    <option value="ESP32/ESP8266">ESP32/ESP8266</option>
+                    <option value="Sensors">Sensors (Various)</option>
+                    <option value="Nvidia Jetson">Nvidia Jetson</option>
+                    <option value="Custom PCB">Custom PCB</option>
+                    <option value="None">None/Software Only</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="complexity"
+                    >Project Complexity <span class="required">*</span></label
+                  >
+                  <select id="complexity" class="form-input" required>
+                    <option value="" disabled selected>
+                      Select complexity level
+                    </option>
+                    <option value="Beginner">Beginner (2-4 weeks)</option>
+                    <option value="Intermediate">
+                      Intermediate (1-2 months)
+                    </option>
+                    <option value="Advanced">Advanced (2-4 months)</option>
+                    <option value="Research">
+                      Research Level (3-6 months)
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="domain">Project Domain (Optional)</label>
+                  <input
+                    type="text"
+                    id="domain"
+                    class="form-input"
+                    placeholder="e.g. healthcare, agriculture, smart home, education"
+                  />
+                  <small class="form-help"
+                    >Specify the application area for your project</small
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="additional-info"
+                    >Additional Requirements (Optional)</label
+                  >
+                  <textarea
+                    id="additional-info"
+                    class="form-input"
+                    rows="3"
+                    placeholder="Any specific requirements, constraints, or preferences for your project"
+                  ></textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button type="reset" class="btn btn-outline">
+                    Reset Form
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-magic"></i> Generate Ideas
+                  </button>
+                </div>
+              </form>
             </div>
-        </section>
+          </div>
+
+          <div id="result-container" class="results-container">
+            <div
+              id="loading-spinner"
+              class="loading-spinner"
+              style="display: none"
+            >
+              <div class="spinner"></div>
+              <p>Generating your AI-powered project ideas...</p>
+              <small>This may take a few seconds</small>
+            </div>
+
+            <div id="result-card" class="result-card" style="display: none">
+              <div class="result-header">
+                <h2>Your Generated Project Ideas</h2>
+                <p>AI-powered suggestions based on your requirements</p>
+              </div>
+
+              <div class="result-content">
+                <div id="problem-statement"></div>
+              </div>
+
+              <div class="result-actions">
+                <button id="copy-button" class="btn btn-outline">
+                  <i class="fas fa-copy"></i> Copy to Clipboard
+                </button>
+                <button id="save-button" class="btn btn-primary">
+                  <i class="fas fa-save"></i> Save to Favorites
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="example-projects">
+            <h2 class="section-title">Example Project Ideas</h2>
+            <p class="section-description">
+              Browse through these sample tech & hardware projects for
+              inspiration
+            </p>
+
+            <div class="example-projects-grid">
+              <div class="project-card">
+                <h3 class="project-title">IoT & Embedded Systems</h3>
+                <p class="project-description">
+                  Develop an automated plant monitoring and care system using
+                  Arduino, soil moisture sensors, and a water pump. Create a
+                  companion mobile app that displays plant health metrics and
+                  allows remote watering control via Bluetooth or WiFi.
+                </p>
+              </div>
+
+              <div class="project-card">
+                <h3 class="project-title">Robotics & Computer Vision</h3>
+                <p class="project-description">
+                  Build a Raspberry Pi-powered recycling sorter that uses a
+                  camera and machine learning to identify and sort different
+                  types of recyclable materials. Implement a servo-controlled
+                  mechanism to physically separate items into appropriate bins.
+                </p>
+              </div>
+
+              <div class="project-card">
+                <h3 class="project-title">Smart Health Tech</h3>
+                <p class="project-description">
+                  Create a wearable health monitoring device using ESP32, heart
+                  rate sensor, and accelerometer to track activity and vital
+                  signs. Develop a companion web application that visualizes
+                  health data and provides insights using simple analytics.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>IdeaSpark</h2>
-                    <p>AI-powered project idea generator for tech and hardware-based projects.</p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h3>Site Map</h3>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="about.html">How It Works</a></li>
-                            <li><a href="generate.html">Generate Ideas</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h3>Account</h3>
-                        <ul>
-                            <li><a href="profile.html">Profile</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h3>Contact</h3>
-                        <ul>
-                            <li><a href="contact.html">Contact Us</a></li>
-                            <li><a href="mailto:support@ideaspark.com">support@ideaspark.com</a></li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>IdeaSpark</h2>
+            <p>
+              AI-powered project idea generator for tech and hardware-based
+              projects.
+            </p>
+          </div>
+
+          <div class="footer-links">
+            <div class="footer-column">
+              <h3>Site Map</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">How It Works</a></li>
+                <li><a href="generate.html">Generate Ideas</a></li>
+              </ul>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 Idea Spark. All rights reserved.</p>
+
+            <div class="footer-column">
+              <h3>Account</h3>
+              <ul>
+                <li><a href="profile.html">Profile</a></li>
+              </ul>
             </div>
+
+            <div class="footer-column">
+              <h3>Contact</h3>
+              <ul>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li>
+                  <a href="mailto:support@ideaspark.com"
+                    >support@ideaspark.com</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 Idea Spark. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="js/generator.js"></script>
-</body>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const generatorForm = document.getElementById("generator-form");
+        const resultContainer = document.getElementById("result-container");
+        const loadingSpinner = document.getElementById("loading-spinner");
+        const resultCard = document.getElementById("result-card");
+        const problemStatementElement =
+          document.getElementById("problem-statement");
+        const copyButton = document.getElementById("copy-button");
+        const saveButton = document.getElementById("save-button");
+
+        // API Configuration
+        const API_BASE_URL = "http://localhost:5000";
+
+        // Hamburger menu functionality
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-menu");
+
+        if (hamburger && navMenu) {
+          hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
+          });
+        }
+
+        if (generatorForm) {
+          generatorForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            try {
+              // Show loading state
+              if (loadingSpinner) loadingSpinner.style.display = "block";
+              if (resultCard) resultCard.style.display = "none";
+
+              // Gather form data
+              const formData = {
+                numberOfIdeas:
+                  parseInt(document.getElementById("number").value) || 1,
+                techStack: document.getElementById("tech-stack").value,
+                hardwareComponents:
+                  document.getElementById("hardware").value || "None",
+                complexity: document.getElementById("complexity").value,
+                domain: document.getElementById("domain").value || "",
+                additionalRequirements:
+                  document.getElementById("additional-info").value || "",
+              };
+
+              // Validate required fields
+              if (!formData.techStack || !formData.complexity) {
+                throw new Error(
+                  "Technology Stack and Complexity are required fields"
+                );
+              }
+
+              if (formData.numberOfIdeas < 1 || formData.numberOfIdeas > 5) {
+                throw new Error("Number of ideas must be between 1 and 5");
+              }
+
+              console.log("Sending request with data:", formData);
+
+              // Make API call to backend
+              const response = await fetch(
+                `${API_BASE_URL}/api/ai/generate-ideas`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(formData),
+                }
+              );
+
+              // Check if response is ok
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                  errorData.error || `HTTP error! status: ${response.status}`
+                );
+              }
+
+              // Parse response
+              const data = await response.json();
+              console.log("Received response:", data);
+
+              // Update UI with generated ideas
+              displayGeneratedIdeas(data);
+
+              // Hide loading, show result
+              if (loadingSpinner) loadingSpinner.style.display = "none";
+              if (resultCard) resultCard.style.display = "block";
+
+              // Scroll to results
+              resultContainer.scrollIntoView({ behavior: "smooth" });
+            } catch (error) {
+              console.error("Error generating ideas:", error);
+
+              // Hide loading spinner
+              if (loadingSpinner) loadingSpinner.style.display = "none";
+
+              // Show error message
+              showErrorMessage(error.message);
+            }
+          });
+        }
+
+        // Function to display generated ideas in the UI
+        function displayGeneratedIdeas(data) {
+          if (data.success && data.ideas && data.ideas.length > 0) {
+            // For multiple ideas, we'll display them all
+            let displayContent = "";
+
+            if (data.ideas.length === 1) {
+              displayContent = data.ideas[0].content;
+            } else {
+              // If multiple ideas, format them nicely
+              displayContent = data.ideas
+                .map((idea, index) => {
+                  return `**Idea ${index + 1}:**\n\n${idea.content}`;
+                })
+                .join("\n\n---\n\n");
+            }
+
+            // Update the problem statement element
+            if (problemStatementElement) {
+              // Convert markdown-style formatting to HTML for better display
+              const formattedContent = formatMarkdownForDisplay(displayContent);
+              problemStatementElement.innerHTML = formattedContent;
+            }
+          } else {
+            throw new Error("No ideas were generated. Please try again.");
+          }
+        }
+
+        // Function to format markdown-style text for HTML display
+        function formatMarkdownForDisplay(text) {
+          return (
+            text
+              // Bold text **text** -> <strong>text</strong>
+              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+              // Bullet points * text -> <li>text</li>
+              .replace(/^\*\s(.+)$/gm, "<li>$1</li>")
+              // Line breaks
+              .replace(/\n\n/g, "</p><p>")
+              // Wrap in paragraphs
+              .replace(/^/, "<p>")
+              .replace(/$/, "</p>")
+              // Handle lists
+              .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+              // Clean up empty paragraphs
+              .replace(/<p><\/p>/g, "")
+              // Handle horizontal rules
+              .replace(/---/g, "<hr>")
+          );
+        }
+
+        // Function to show error messages
+        function showErrorMessage(message) {
+          if (problemStatementElement) {
+            problemStatementElement.innerHTML = `
+                <div style="color: #dc3545; padding: 20px; border: 1px solid #dc3545; border-radius: 8px; background-color: #f8d7da;">
+                    <strong>Error:</strong> ${message}
+                    <br><br>
+                    <small>Please check your internet connection and try again. If the problem persists, the server might be down.</small>
+                </div>
+            `;
+          }
+
+          if (resultCard) resultCard.style.display = "block";
+          showToast(message, "error");
+        }
+
+        // Copy button handler
+        if (copyButton) {
+          copyButton.addEventListener("click", () => {
+            // Get the text content (without HTML formatting)
+            const problemStatement =
+              problemStatementElement.textContent ||
+              problemStatementElement.innerText;
+
+            navigator.clipboard
+              .writeText(problemStatement)
+              .then(() => {
+                showToast("Copied to clipboard!");
+
+                // Visual feedback
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Copied';
+
+                setTimeout(() => {
+                  copyButton.innerHTML = originalText;
+                }, 2000);
+              })
+              .catch((err) => {
+                console.error("Failed to copy:", err);
+                showToast("Failed to copy to clipboard", "error");
+              });
+          });
+        }
+
+        // Save button handler (keeping localStorage for now, but you could modify this to use your API)
+        if (saveButton) {
+          saveButton.addEventListener("click", () => {
+            const problemStatement =
+              problemStatementElement.textContent ||
+              problemStatementElement.innerText;
+
+            // Get existing saved ideas from localStorage or initialize empty array
+            const savedIdeas = JSON.parse(
+              localStorage.getItem("savedIdeas") || "[]"
+            );
+
+            // Check if this idea is already saved
+            const isAlreadySaved = savedIdeas.some(
+              (idea) => idea === problemStatement
+            );
+
+            if (isAlreadySaved) {
+              showToast("This idea is already saved to your favorites");
+              return;
+            }
+
+            // Add new idea to saved ideas
+            savedIdeas.push({
+              content: problemStatement,
+              timestamp: new Date().toISOString(),
+              id: Date.now(), // Simple ID generation
+            });
+
+            // Save back to localStorage
+            localStorage.setItem("savedIdeas", JSON.stringify(savedIdeas));
+
+            // Show success message
+            showToast("Saved to favorites!");
+
+            // Visual feedback
+            const originalText = saveButton.innerHTML;
+            saveButton.innerHTML = '<i class="fas fa-check"></i> Saved';
+
+            setTimeout(() => {
+              saveButton.innerHTML = originalText;
+            }, 2000);
+          });
+        }
+
+        // Toast notification function
+        function showToast(message, type = "success") {
+          // Remove existing toast if any
+          const existingToast = document.querySelector(".toast-notification");
+          if (existingToast) {
+            existingToast.remove();
+          }
+
+          // Create toast element
+          const toast = document.createElement("div");
+          toast.className = `toast-notification toast-${type}`;
+          toast.innerHTML = `
+            <div class="toast-content">
+                <i class="fas fa-${
+                  type === "success" ? "check-circle" : "exclamation-circle"
+                }"></i>
+                <span>${message}</span>
+            </div>
+        `;
+
+          // Add styles
+          toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === "success" ? "#28a745" : "#dc3545"};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        `;
+
+          // Add animation styles if not already present
+          if (!document.querySelector("#toast-styles")) {
+            const style = document.createElement("style");
+            style.id = "toast-styles";
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+                .toast-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+            `;
+            document.head.appendChild(style);
+          }
+
+          // Add to page
+          document.body.appendChild(toast);
+
+          // Remove after 3 seconds
+          setTimeout(() => {
+            toast.style.animation = "slideOut 0.3s ease-in";
+            setTimeout(() => {
+              toast.remove();
+            }, 300);
+          }, 3000);
+        }
+
+        // Test API connection on page load (optional)
+        testAPIConnection();
+
+        async function testAPIConnection() {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/health`);
+            if (response.ok) {
+              console.log("✅ Backend connection successful");
+            } else {
+              console.warn(
+                "⚠️ Backend responded but with error status:",
+                response.status
+              );
+            }
+          } catch (error) {
+            console.warn("⚠️ Backend connection failed:", error.message);
+            console.warn(
+              "Make sure your backend server is running on http://localhost:5000"
+            );
+          }
+        }
+      });
+    </script>
+  </body>
 </html>

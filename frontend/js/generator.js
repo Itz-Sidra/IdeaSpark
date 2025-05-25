@@ -7,27 +7,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyButton = document.getElementById('copy-button');
     const saveButton = document.getElementById('save-button');
     
+    // API Configuration
+    const API_BASE_URL = 'http://localhost:5000';
+    
     if (generatorForm) {
-        generatorForm.addEventListener('submit', function (e) {
+        generatorForm.addEventListener('submit', async function (e) {
             e.preventDefault();
             
-            // Show loading state
-            if (loadingSpinner) loadingSpinner.style.display = 'block';
-            if (resultCard) resultCard.style.display = 'none';
-            
-            // Gather form data
-            const formData = {
-                techStack: document.getElementById('tech-stack').value,
-                hardware: document.getElementById('hardware').value,
-                complexity: document.getElementById('complexity').value,
-                domain: document.getElementById('domain').value,
-                additionalInfo: document.getElementById('additional-info').value
-            };
-            
-            // In a real application, this would be an API call
-            // For demo purposes, we'll use a timeout to simulate processing
-            setTimeout(() => {
-                generateProblemStatement(formData);
+            try {
+                // Show loading state
+                if (loadingSpinner) loadingSpinner.style.display = 'block';
+                if (resultCard) resultCard.style.display = 'none';
+                
+                // Gather form data
+                const formData = {
+                    numberOfIdeas: parseInt(document.getElementById('number').value) || 1,
+                    techStack: document.getElementById('tech-stack').value,
+                    hardwareComponents: document.getElementById('hardware').value || 'None',
+                    complexity: document.getElementById('complexity').value,
+                    domain: document.getElementById('domain').value || '',
+                    additionalRequirements: document.getElementById('additional-info').value || ''
+                };
+                
+                // Validate required fields
+                if (!formData.techStack || !formData.complexity) {
+                    throw new Error('Technology Stack and Complexity are required fields');
+                }
+                
+                if (formData.numberOfIdeas < 1 || formData.numberOfIdeas > 5) {
+                    throw new Error('Number of ideas must be between 1 and 5');
+                }
+                
+                console.log('Sending request with data:', formData);
+                
+                // Make API call to backend
+                const response = await fetch(`${API_BASE_URL}/api/ai/generate-ideas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Check if response is ok
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+                
+                // Parse response
+                const data = await response.json();
+                console.log('Received response:', data);
+                
+                // Update UI with generated ideas
+                displayGeneratedIdeas(data);
                 
                 // Hide loading, show result
                 if (loadingSpinner) loadingSpinner.style.display = 'none';
@@ -35,14 +68,87 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Scroll to results
                 resultContainer.scrollIntoView({ behavior: 'smooth' });
-            }, 1500);
+                
+            } catch (error) {
+                console.error('Error generating ideas:', error);
+                
+                // Hide loading spinner
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+                
+                // Show error message
+                showErrorMessage(error.message);
+            }
         });
+    }
+    
+    // Function to display generated ideas in the UI
+    function displayGeneratedIdeas(data) {
+        if (data.success && data.ideas && data.ideas.length > 0) {
+            // For multiple ideas, we'll display them all
+            let displayContent = '';
+            
+            if (data.ideas.length === 1) {
+                displayContent = data.ideas[0].content;
+            } else {
+                // If multiple ideas, format them nicely
+                displayContent = data.ideas.map((idea, index) => {
+                    return `**Idea ${index + 1}:**\n\n${idea.content}`;
+                }).join('\n\n---\n\n');
+            }
+            
+            // Update the problem statement element
+            if (problemStatementElement) {
+                // Convert markdown-style formatting to HTML for better display
+                const formattedContent = formatMarkdownForDisplay(displayContent);
+                problemStatementElement.innerHTML = formattedContent;
+            }
+        } else {
+            throw new Error('No ideas were generated. Please try again.');
+        }
+    }
+    
+    // Function to format markdown-style text for HTML display
+    function formatMarkdownForDisplay(text) {
+        return text
+            // Bold text **text** -> <strong>text</strong>
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            // Bullet points * text -> <li>text</li>
+            .replace(/^\*\s(.+)$/gm, '<li>$1</li>')
+            // Line breaks
+            .replace(/\n\n/g, '</p><p>')
+            // Wrap in paragraphs
+            .replace(/^/, '<p>')
+            .replace(/$/, '</p>')
+            // Handle lists
+            .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
+            // Clean up empty paragraphs
+            .replace(/<p><\/p>/g, '')
+            // Handle horizontal rules
+            .replace(/---/g, '<hr>');
+    }
+    
+    // Function to show error messages
+    function showErrorMessage(message) {
+        if (problemStatementElement) {
+            problemStatementElement.innerHTML = `
+                <div style="color: #dc3545; padding: 20px; border: 1px solid #dc3545; border-radius: 8px; background-color: #f8d7da;">
+                    <strong>Error:</strong> ${message}
+                    <br><br>
+                    <small>Please check your internet connection and try again. If the problem persists, the server might be down.</small>
+                </div>
+            `;
+        }
+        
+        if (resultCard) resultCard.style.display = 'block';
+        showToast(message, 'error');
     }
     
     // Copy button handler
     if (copyButton) {
         copyButton.addEventListener('click', () => {
-            const problemStatement = problemStatementElement.textContent;
+            // Get the text content (without HTML formatting)
+            const problemStatement = problemStatementElement.textContent || problemStatementElement.innerText;
+            
             navigator.clipboard.writeText(problemStatement)
                 .then(() => {
                     showToast('Copied to clipboard!');
@@ -62,10 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Save button handler
+    // Save button handler (keeping localStorage for now, but you could modify this to use your API)
     if (saveButton) {
         saveButton.addEventListener('click', () => {
-            const problemStatement = problemStatementElement.textContent;
+            const problemStatement = problemStatementElement.textContent || problemStatementElement.innerText;
             
             // Get existing saved ideas from localStorage or initialize empty array
             const savedIdeas = JSON.parse(localStorage.getItem('savedIdeas') || '[]');
@@ -79,7 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Add new idea to saved ideas
-            savedIdeas.push(problemStatement);
+            savedIdeas.push({
+                content: problemStatement,
+                timestamp: new Date().toISOString(),
+                id: Date.now() // Simple ID generation
+            });
             
             // Save back to localStorage
             localStorage.setItem('savedIdeas', JSON.stringify(savedIdeas));
@@ -97,76 +207,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Function to generate a problem statement based on form inputs
-    function generateProblemStatement(formData) {
-        // Demo statements for different tech stacks
-        const statements = {
-            "Web Development": [
-                `Develop a ${formData.domain || 'community-focused'} web platform that helps users track and organize ${formData.additionalInfo || 'personal projects'}. Use modern frontend frameworks and implement real-time data synchronization.`,
-                `Create a responsive web application for ${formData.domain || 'educational'} purposes that visualizes complex data sets and allows interactive exploration.`,
-                `Build a progressive web app that works offline and helps users manage ${formData.domain || 'daily tasks'} with smart suggestions and reminders.`
-            ],
-            "Mobile App": [
-                `Develop a cross-platform mobile app for ${formData.domain || 'health tracking'} that integrates with ${formData.hardware || 'wearable devices'} to provide personalized insights and recommendations.`,
-                `Create a mobile application that uses augmented reality to help users ${formData.additionalInfo || 'learn about their environment'} in interactive ways.`,
-                `Build a location-aware mobile app that helps users discover ${formData.domain || 'local events and activities'} based on their preferences and past behavior.`
-            ],
-            "Embedded Systems": [
-                `Design and build an embedded system using ${formData.hardware || 'Arduino'} that monitors and optimizes ${formData.domain || 'home energy usage'} with automated controls and user notifications.`,
-                `Create a smart ${formData.domain || 'gardening'} system with ${formData.hardware || 'sensors'} that monitors plant health and automates care routines based on environmental data.`,
-                `Develop an embedded solution for ${formData.domain || 'security monitoring'} that uses low-power communication protocols and can operate for months on battery power.`
-            ],
-            "Machine Learning": [
-                `Create a machine learning model that analyzes ${formData.domain || 'user behavior'} data to provide personalized recommendations and improve user experience.`,
-                `Develop an image recognition system specialized for ${formData.domain || 'identifying plant diseases'} from smartphone photos, providing treatment recommendations.`,
-                `Build a natural language processing application that helps users ${formData.additionalInfo || 'summarize and extract key information'} from lengthy documents or conversations.`
-            ],
-            "IoT": [
-                `Design an IoT ecosystem using ${formData.hardware || 'ESP32 devices'} that creates a ${formData.domain || 'smart home'} environment with seamless device communication and intelligent automation.`,
-                `Build a network of IoT sensors to monitor ${formData.domain || 'environmental conditions'} and provide early warnings for potential issues through a user-friendly dashboard.`,
-                `Develop an IoT solution for ${formData.domain || 'retail spaces'} that tracks customer movement and provides analytics to optimize store layout and product placement.`
-            ],
-            "Blockchain": [
-                `Create a blockchain-based system for ${formData.domain || 'supply chain tracking'} that ensures transparency and authenticity throughout the product journey.`,
-                `Develop a decentralized application (dApp) that allows users to ${formData.additionalInfo || 'securely share and monetize their data'} without third-party intermediaries.`,
-                `Build a blockchain solution for ${formData.domain || 'digital identity verification'} that gives users control over their personal information while providing secure authentication.`
-            ],
-            "Robotics": [
-                `Design and build a robotic system using ${formData.hardware || 'Raspberry Pi'} that can ${formData.additionalInfo || 'navigate indoor environments'} and perform basic tasks autonomously.`,
-                `Create a robotic assistant specialized for ${formData.domain || 'elderly care'} that can monitor health metrics and provide medication reminders.`,
-                `Develop a robotic solution for ${formData.domain || 'educational purposes'} that teaches coding and engineering principles through interactive challenges.`
-            ]
-        };
+    // Toast notification function
+    function showToast(message, type = 'success') {
+        // Remove existing toast if any
+        const existingToast = document.querySelector('.toast-notification');
+        if (existingToast) {
+            existingToast.remove();
+        }
         
-        // If tech stack exists in our pre-written statements
-        if (statements[formData.techStack]) {
-            const options = statements[formData.techStack];
-            let statement = options[Math.floor(Math.random() * options.length)];
-            
-            // Add complexity level
-            switch(formData.complexity) {
-                case 'Beginner':
-                    statement += ` This project is suitable for beginners, focusing on fundamental concepts and basic implementation.`;
-                    break;
-                case 'Intermediate':
-                    statement += ` At an intermediate difficulty level, this project will challenge you to integrate multiple components and implement more advanced features.`;
-                    break;
-                case 'Advanced':
-                    statement += ` This advanced project will require sophisticated implementation techniques, system optimization, and handling complex user interactions.`;
-                    break;
-                case 'Research':
-                    statement += ` This research-level project pushes beyond current implementations, requiring novel approaches and potentially contributing new knowledge to the field.`;
-                    break;
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `toast-notification toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-content">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        // Add styles
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#28a745' : '#dc3545'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        `;
+        
+        // Add animation styles if not already present
+        if (!document.querySelector('#toast-styles')) {
+            const style = document.createElement('style');
+            style.id = 'toast-styles';
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+                .toast-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Add to page
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // Test API connection on page load (optional)
+    testAPIConnection();
+    
+    async function testAPIConnection() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/health`);
+            if (response.ok) {
+                console.log('✅ Backend connection successful');
+            } else {
+                console.warn('⚠️ Backend responded but with error status:', response.status);
             }
-            
-            // Update the DOM
-            if (problemStatementElement) {
-                problemStatementElement.textContent = statement;
-            }
-        } else {
-            if (problemStatementElement) {
-                problemStatementElement.textContent = `Please select a technology stack to generate a project idea.`;
-            }
+        } catch (error) {
+            console.warn('⚠️ Backend connection failed:', error.message);
+            console.warn('Make sure your backend server is running on http://localhost:5000');
         }
     }
 });
