@@ -40,8 +40,22 @@ document.getElementById('signup-form').addEventListener('submit', async function
         console.log('Signup Response:', data);
 
         if (response.ok) {
-            alert('Sign up successful! Please log in.');
-            window.location.href = 'login.html';
+            // FIXED: Since signup also returns a token, we can automatically log them in
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify({
+                    id: data.user.id,
+                    name: data.user.name,
+                    email: data.user.email,
+                    createdAt: data.user.createdAt
+                }));
+                
+                alert('Sign up successful! You are now logged in.');
+                window.location.href = 'profile.html';
+            } else {
+                alert('Sign up successful! Please log in.');
+                window.location.href = 'login.html';
+            }
         } else {
             alert(`Error: ${data.error || 'Could not create account'}`);
         }
