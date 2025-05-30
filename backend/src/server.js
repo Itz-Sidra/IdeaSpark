@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const aiRoutes = require('./routes/ai.routes');
+const ideasRoutes = require('./routes/ideas.routes');
 require('dotenv').config();
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/ideas', ideasRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -43,7 +45,11 @@ app.get('/', (req, res) => {
       'GET /api/ai/health - AI service health',
       'POST /api/ai/generate-ideas - Generate project ideas',
       'POST /api/ai/generate-idea - Generate single idea (legacy)',
-      'POST /api/auth/* - Authentication routes'
+      'POST /api/auth/signup - User registration',
+      'POST /api/auth/login - User login',
+      'POST /api/ideas/save - Save idea (auth required)',
+      'GET /api/ideas/my-ideas - Get user ideas (auth required)',
+      'DELETE /api/ideas/delete/:ideaId - Delete idea (auth required)'
     ]
   });
 });
@@ -89,7 +95,12 @@ app.use((req, res) => {
       'GET /api/test',
       'GET /api/ai/health',
       'POST /api/ai/generate-ideas',
-      'POST /api/ai/generate-idea'
+      'POST /api/ai/generate-idea',
+      'POST /api/auth/signup',
+      'POST /api/auth/login',
+      'POST /api/ideas/save',
+      'GET /api/ideas/my-ideas',
+      'DELETE /api/ideas/delete/:ideaId'
     ],
     timestamp: new Date().toISOString()
   });
@@ -113,6 +124,8 @@ const server = app.listen(port, () => {
 ║  🚀 Server running on port ${port}         ║
 ║  🌍 Environment: ${process.env.NODE_ENV || 'development'}                ║
 ║  📝 Gemini API: ${process.env.GEMINI_API_KEY ? '✅ Configured' : '❌ Missing'}     ║
+║  🔐 JWT Secret: ${process.env.JWT_SECRET ? '✅ Configured' : '❌ Missing'}      ║
+║  🗄️  Database: ${process.env.DATABASE_URL ? '✅ Configured' : '❌ Missing'}        ║
 ║  ⏰ Started: ${new Date().toLocaleString()}        ║
 ║                                        ║
 ║  Available endpoints:                  ║
@@ -120,14 +133,23 @@ const server = app.listen(port, () => {
 ║  • GET  /api/health                    ║
 ║  • GET  /api/ai/health                 ║
 ║  • POST /api/ai/generate-ideas         ║
-║  • POST /api/ai/generate-idea          ║
+║  • POST /api/auth/signup               ║
+║  • POST /api/auth/login                ║
+║  • POST /api/ideas/save                ║
+║  • GET  /api/ideas/my-ideas            ║
+║  • DEL  /api/ideas/delete/:id          ║
 ║                                        ║
 ╚════════════════════════════════════════╝
   `);
   
-  // Check if Gemini API key is configured
-  if (!process.env.GEMINI_API_KEY) {
-    console.warn('⚠️  WARNING: GEMINI_API_KEY is not configured in environment variables');
+  // Check for missing environment variables
+  const missingEnvVars = [];
+  if (!process.env.GEMINI_API_KEY) missingEnvVars.push('GEMINI_API_KEY');
+  if (!process.env.JWT_SECRET) missingEnvVars.push('JWT_SECRET');
+  if (!process.env.DATABASE_URL) missingEnvVars.push('DATABASE_URL');
+  
+  if (missingEnvVars.length > 0) {
+    console.warn('⚠️  WARNING: Missing environment variables:', missingEnvVars.join(', '));
   }
 });
 
