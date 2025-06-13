@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+require("dotenv").config();
+
 const authRoutes = require("./routes/auth.routes");
 const aiRoutes = require("./routes/ai.routes");
 const ideasRoutes = require("./routes/ideas.routes");
-require("dotenv").config();
 
 const app = express();
 
@@ -35,27 +37,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/ideas", ideasRoutes);
 
-/*app.get("/", (req, res) => {
-  res.json({
-    message: "IdeaSpark API Server",
-    version: "1.0.0",
-    status: "Running",
-    timestamp: new Date().toISOString(),
-    endpoints: [
-      "GET /api/health - Health check",
-      "GET /api/ai/health - AI service health",
-      "POST /api/ai/generate-ideas - Generate project ideas",
-      "POST /api/ai/generate-idea - Generate single idea (legacy)",
-      "POST /api/auth/signup - User registration",
-      "POST /api/auth/login - User login",
-      "POST /api/ideas/save - Save idea (auth required)",
-      "GET /api/ideas/my-ideas - Get user ideas (auth required)",
-      "DELETE /api/ideas/delete/:ideaId - Delete idea (auth required)",
-    ],
-  });
-});
- */
-
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     status: "Server is healthy",
@@ -73,6 +54,31 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Serve HTML pages
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/index.html"))
+);
+app.get("/about", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/about.html"))
+);
+app.get("/contact", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/contact.html"))
+);
+app.get("/generate", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/generate.html"))
+);
+app.get("/login", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/login.html"))
+);
+app.get("/signup", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/signup.html"))
+);
+app.get("/profile", (req, res) =>
+  res.sendFile(path.join(__dirname, "../frontend/html/profile.html"))
+);
+
 app.use((err, req, res, next) => {
   console.error("Error occurred:", err);
   res.status(500).json({
@@ -89,6 +95,12 @@ app.use((req, res) => {
     method: req.method,
     availableRoutes: [
       "GET /",
+      "GET /about",
+      "GET /contact",
+      "GET /generate",
+      "GET /login",
+      "GET /signup",
+      "GET /profile",
       "GET /api/health",
       "GET /api/test",
       "GET /api/ai/health",
@@ -105,37 +117,17 @@ app.use((req, res) => {
 });
 
 const port = process.env.PORT || 5000;
-
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully");
-  server.close(() => {
-    console.log("Process terminated");
-  });
-});
-
 const server = app.listen(port, () => {
   console.log(`
 ╔════════════════════════════════════════╗
 ║         IdeaSpark API Server           ║
 ║                                        ║
-║  🚀 Server running on port ${port}         ║
-║  🌍 Environment: ${process.env.NODE_ENV || "development"}                ║
-║  📝 Gemini API: ${process.env.GEMINI_API_KEY ? "Configured" : "Missing"}     ║
-║  🔐 JWT Secret: ${process.env.JWT_SECRET ? "Configured" : "Missing"}      ║
-║  🗄️  Database: ${process.env.DATABASE_URL ? "Configured" : "Missing"}        ║
-║  ⏰ Started: ${new Date().toLocaleString()}        ║
-║                                        ║
-║  Available endpoints:                  ║
-║  • GET  /                              ║
-║  • GET  /api/health                    ║
-║  • GET  /api/ai/health                 ║
-║  • POST /api/ai/generate-ideas         ║
-║  • POST /api/auth/signup               ║
-║  • POST /api/auth/login                ║
-║  • POST /api/ideas/save                ║
-║  • GET  /api/ideas/my-ideas            ║
-║  • DEL  /api/ideas/delete/:id          ║
-║                                        ║
+║  Server running on port ${port}         ║
+║  Environment: ${process.env.NODE_ENV || "development"}                ║
+║  Gemini API: ${process.env.GEMINI_API_KEY ? "Configured" : "Missing"}     ║
+║  JWT Secret: ${process.env.JWT_SECRET ? "Configured" : "Missing"}      ║
+║  Database: ${process.env.DATABASE_URL ? "Configured" : "Missing"}        ║
+║  Started: ${new Date().toLocaleString()}        ║
 ╚════════════════════════════════════════╝
   `);
 
@@ -145,46 +137,15 @@ const server = app.listen(port, () => {
   if (!process.env.DATABASE_URL) missingEnvVars.push("DATABASE_URL");
 
   if (missingEnvVars.length > 0) {
-    console.warn(
-      "⚠️  WARNING: Missing environment variables:",
-      missingEnvVars.join(", ")
-    );
+    console.warn("⚠️  WARNING: Missing environment variables:", missingEnvVars.join(", "));
   }
 });
 
-const path = require("path");
-
-// Serve static files (CSS, JS, images, etc.)
-app.use(express.static(path.join(__dirname, "../frontend")));
-
-// Serve HTML pages
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/index.html"));
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received, shutting down gracefully");
+  server.close(() => {
+    console.log("Process terminated");
+  });
 });
-
-app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/about.html"));
-});
-
-app.get("/contact", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/contact.html"));
-});
-
-app.get("/generate", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/generate.html"));
-});
-
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/login.html"));
-});
-
-app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/signup.html"));
-});
-
-app.get("/profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/profile.html"));
-});
-
 
 module.exports = app;
