@@ -262,6 +262,71 @@ ul {
     border-top: 1px solid var(--border-color);
     color: var(--text-light);
 }
+
+.idea-meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tech-badge, .hardware-badge, .domain-badge {
+  background: #e9ecef;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #495057;
+}
+
+.tech-badge { background: #d4edda; color: #155724; }
+.hardware-badge { background: #cce5ff; color: #004085; }
+.domain-badge { background: #fff3cd; color: #856404; }
+
+.idea-footer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.idea-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn, .delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.view-btn {
+  background: #17a2b8;
+  color: white;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.idea-meta-full {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.modal-content {
+  max-width: 800px;
+  width: 90%;
+}
+.full-description {
+  max-height: 400px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
   
   /* Responsive */
   @media screen and (max-width: 768px) {
