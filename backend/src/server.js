@@ -60,22 +60,22 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/index.html"))
 );
-app.get("/about", (req, res) =>
+app.get("/about.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/about.html"))
 );
-app.get("/contact", (req, res) =>
+app.get("/contact.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/contact.html"))
 );
-app.get("/generate", (req, res) =>
+app.get("/generate.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/generate.html"))
 );
-app.get("/login", (req, res) =>
+app.get("/login.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/login.html"))
 );
-app.get("/signup", (req, res) =>
+app.get("/signup.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/signup.html"))
 );
-app.get("/profile", (req, res) =>
+app.get("/profile.html", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/profile.html"))
 );
 
