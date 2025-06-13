@@ -173,34 +173,6 @@
           }
         });
       });
-
-      document
-        .getElementById("signup-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const name = document.getElementById("name").value;
-          const email = document.getElementById("email").value;
-          const password = document.getElementById("password").value;
-          const confirmPassword =
-            document.getElementById("confirmPassword").value;
-
-          if (password.length < 8) {
-            alert("Password must be at least 8 characters long");
-            return;
-          }
-
-          if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-          }
-
-          console.log("Sign up successful", { name, email });
-
-          localStorage.setItem("user", JSON.stringify({ name, email }));
-
-          window.location.href = "index.html";
-        });
     </script>
   </body>
 </html>
