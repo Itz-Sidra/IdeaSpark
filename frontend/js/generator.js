@@ -35,20 +35,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = {
           numberOfIdeas: parseInt(document.getElementById("number").value) || 1,
           techStack: document.getElementById("tech-stack").value,
-          hardwareComponents:
-            document.getElementById("hardware").value || "None",
+          hardwareComponents: document.getElementById("hardware").value || "None",
           complexity: document.getElementById("complexity").value,
           domain: document.getElementById("domain").value || "",
-          additionalRequirements:
-            document.getElementById("additional-info").value || "",
+          additionalRequirements: document.getElementById("additional-info").value || "",
         };
 
         currentFormData = formData;
 
         if (!formData.techStack || !formData.complexity) {
-          throw new Error(
-            "Technology Stack and Complexity are required fields"
-          );
+          throw new Error("Technology Stack and Complexity are required fields");
         }
 
         if (formData.numberOfIdeas < 1 || formData.numberOfIdeas > 5) {
@@ -67,29 +63,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(
-            errorData.error || `HTTP error! status: ${response.status}`
-          );
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
         console.log("Received response:", data);
 
         currentGeneratedIdeas = data.ideas;
-
         displayGeneratedIdeas(data);
 
         if (loadingSpinner) loadingSpinner.style.display = "none";
         if (resultCard) resultCard.style.display = "block";
 
         updateSaveButton();
-
         resultContainer.scrollIntoView({ behavior: "smooth" });
+
       } catch (error) {
         console.error("Error generating ideas:", error);
-
         if (loadingSpinner) loadingSpinner.style.display = "none";
-
         showErrorMessage(error.message);
       }
     });
@@ -133,61 +124,47 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    updateSaveButton(finalToken, user);
-  }
-
-  function updateSaveButton(token, user) {
-    const saveButton = document.getElementById("save-button");
-    if (!saveButton) return;
-
-    if (!token || !user) {
-      saveButton.disabled = true;
-      saveButton.innerHTML = '<i class="fas fa-lock"></i> Login to Save';
-      saveButton.onclick = () => {
-        showToast("Please login to save ideas", "error");
-        setTimeout(() => {
-          window.location.href = "../pages/login.html";
-        }, 1500);
-      };
-    } else {
-      saveButton.disabled = false;
-      saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
-      saveButton.onclick = null;
-
-      if (!currentGeneratedIdeas || !currentFormData) {
-        saveButton.disabled = true;
-        saveButton.innerHTML =
-          '<i class="fas fa-save"></i> Generate Ideas First';
-      }
-    }
+    updateSaveButton();
   }
 
   function updateSaveButton() {
     if (!saveButton) return;
 
-    const token = localStorage.getItem("authToken");
+    const token = getAuthToken();
     const user = getUserFromStorage();
 
+    console.log("Updating save button - Token:", !!token, "User:", !!user);
+
     if (!token || !user) {
-      saveButton.disabled = true;
+      saveButton.disabled = false; // FIXED: Enable button so it can be clicked
       saveButton.innerHTML = '<i class="fas fa-lock"></i> Login to Save';
-      saveButton.onclick = () => {
+      
+      saveButton.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Login to save clicked");
         showToast("Please login to save ideas", "error");
         setTimeout(() => {
-          window.location.href = "../pages/login.html";
+          window.location.href = "../html/login.html";
         }, 1500);
       };
     } else {
-      saveButton.disabled = false;
-      saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
-      saveButton.onclick = null;
-
       if (!currentGeneratedIdeas || !currentFormData) {
         saveButton.disabled = true;
-        saveButton.innerHTML =
-          '<i class="fas fa-save"></i> Generate Ideas First';
+        saveButton.innerHTML = '<i class="fas fa-save"></i> Generate Ideas First';
+        saveButton.onclick = null;
+      } else {
+        saveButton.disabled = false;
+        saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
+        saveButton.onclick = handleSaveIdeas;
       }
     }
+  }
+
+  function getAuthToken() {
+    return localStorage.getItem("authToken") || 
+           localStorage.getItem("token") || 
+           localStorage.getItem("jwt");
   }
 
   function getUserFromStorage() {
@@ -200,26 +177,99 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function handleSaveIdeas(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const token = getAuthToken();
+    const user = getUserFromStorage();
+
+    console.log("Save button clicked - Token:", !!token, "User:", !!user);
+
+    if (!token || !user) {
+      showToast("Please login to save ideas", "error");
+      setTimeout(() => {
+        window.location.href = "../html/login.html";
+      }, 1500);
+      return;
+    }
+
+    if (!currentGeneratedIdeas || !currentFormData) {
+      showToast("No ideas to save. Please generate ideas first.", "error");
+      return;
+    }
+
+    try {
+      const originalText = saveButton.innerHTML;
+      saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+      saveButton.disabled = true;
+
+      const savePromises = currentGeneratedIdeas.map(async (idea, index) => {
+        const title = extractTitleFromContent(idea.content, index);
+
+        const saveData = {
+          title: title,
+          description: idea.content,
+          language: currentFormData.techStack,
+          hardware: currentFormData.hardwareComponents === "None" ? null : currentFormData.hardwareComponents,
+          domain: currentFormData.domain || null,
+        };
+
+        console.log("Saving idea:", saveData);
+
+        const response = await fetch(`${API_BASE_URL}/api/ideas/save`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(saveData),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Failed to save idea ${index + 1}`);
+        }
+
+        return await response.json();
+      });
+
+      const savedIdeas = await Promise.all(savePromises);
+      const ideaCount = savedIdeas.length;
+      
+      showToast(`Successfully saved ${ideaCount} idea${ideaCount > 1 ? "s" : ""} to your profile!`);
+
+      saveButton.innerHTML = '<i class="fas fa-check"></i> Saved';
+      setTimeout(() => {
+        saveButton.innerHTML = originalText;
+        saveButton.disabled = false;
+      }, 2000);
+
+    } catch (error) {
+      console.error("Save error:", error);
+      showToast(`Failed to save ideas: ${error.message}`, "error");
+
+      const originalText = '<i class="fas fa-save"></i> Save to Favorites';
+      saveButton.innerHTML = originalText;
+      saveButton.disabled = false;
+    }
+  }
+
   function displayGeneratedIdeas(data) {
     if (data.success && data.ideas && data.ideas.length > 0) {
       let displayContent = "";
 
       if (data.ideas.length === 1) {
-        displayContent = data.ideas[0].content;
+        displayContent = cleanupIdeaContent(data.ideas[0].content);
       } else {
         displayContent = data.ideas
           .map((idea, index) => {
-            let cleanContent = idea.content;
-            cleanContent = cleanContent.replace(
-              /^(PROJECT IDEA \d+:|IDEA \d+:|\*\*PROJECT IDEA \d+:\*\*|\*\*IDEA \d+:\*\*)\s*/i,
-              ""
-            );
-
+            let cleanContent = cleanupIdeaContent(idea.content);
             return `**Project Idea ${index + 1}:**\n\n${cleanContent}`;
           })
           .join("\n\n" + "=".repeat(50) + "\n\n");
       }
-
+      
       if (problemStatementElement) {
         const formattedContent = formatMarkdownForDisplay(displayContent);
         problemStatementElement.innerHTML = formattedContent;
@@ -227,6 +277,15 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       throw new Error("No ideas were generated. Please try again.");
     }
+  }
+
+  function cleanupIdeaContent(content) {
+    return content
+      .replace(/^(PROJECT IDEA \d+:|IDEA \d+:|\*\*PROJECT IDEA \d+:\*\*|\*\*IDEA \d+:\*\*)\s*/i, "")
+      .replace(/^([^*\n]+)\*\*\s*/gm, "$1")
+      .replace(/\*\*\s*$/gm, "")
+      .replace(/\*\*(?!\s*[^*\n]+\s*\*\*)/g, "")
+      .trim();
   }
 
   function formatMarkdownForDisplay(text) {
@@ -255,13 +314,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/(<li>.*?<\/li>)(\s*<br>\s*<li>.*?<\/li>)*/gs, (match) => {
         return "<ul>" + match.replace(/<br>/g, "") + "</ul>";
       })
-
       .replace(/<p><\/p>/g, "")
       .replace(/<p>\s*<\/p>/g, "")
-      .replace(
-        /<p>(\s*<(?:h[1-6]|ul|ol|hr)[^>]*>.*?<\/(?:h[1-6]|ul|ol)>\s*)<\/p>/gs,
-        "$1"
-      )
+      .replace(/<p>(\s*<(?:h[1-6]|ul|ol|hr)[^>]*>.*?<\/(?:h[1-6]|ul|ol)>\s*)<\/p>/gs, "$1")
       .replace(/<p>(\s*<hr>\s*)<\/p>/gs, "$1")
       .replace(/(<\/(?:h[1-6]|ul|ol|hr)>)\s*<br>/g, "$1")
       .replace(/<br>\s*(<(?:h[1-6]|ul|ol|hr))/g, "$1")
@@ -271,50 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
     return formattedText;
   }
 
-  function displayGeneratedIdeas(data) {
-    if (data.success && data.ideas && data.ideas.length > 0) {
-      let displayContent = "";
-
-      if (data.ideas.length === 1) {
-        displayContent = cleanupIdeaContent(data.ideas[0].content);
-      } else {
-        displayContent = data.ideas
-          .map((idea, index) => {
-            let cleanContent = cleanupIdeaContent(idea.content);
-
-            return `**Project Idea ${index + 1}:**\n\n${cleanContent}`;
-          })
-          .join("\n\n" + "=".repeat(50) + "\n\n");
-      }
-      if (problemStatementElement) {
-        const formattedContent = formatMarkdownForDisplay(displayContent);
-        problemStatementElement.innerHTML = formattedContent;
-      }
-    } else {
-      throw new Error("No ideas were generated. Please try again.");
-    }
-  }
-
-  function cleanupIdeaContent(content) {
-    return content
-      .replace(
-        /^(PROJECT IDEA \d+:|IDEA \d+:|\*\*PROJECT IDEA \d+:\*\*|\*\*IDEA \d+:\*\*)\s*/i,
-        ""
-      )
-      .replace(/^([^*\n]+)\*\*\s*/gm, "$1")
-      .replace(/\*\*\s*$/gm, "")
-      .replace(/\*\*(?!\s*[^*\n]+\s*\*\*)/g, "")
-      .trim();
-  }
   function showErrorMessage(message) {
     if (problemStatementElement) {
       problemStatementElement.innerHTML = `
-                <div style="color: #dc3545; padding: 20px; border: 1px solid #dc3545; border-radius: 8px; background-color: #f8d7da;">
-                    <strong>Error:</strong> ${message}
-                    <br><br>
-                    <small>Please check your internet connection and try again. If the problem persists, the server might be down.</small>
-                </div>
-            `;
+        <div style="color: #dc3545; padding: 20px; border: 1px solid #dc3545; border-radius: 8px; background-color: #f8d7da;">
+          <strong>Error:</strong> ${message}
+          <br><br>
+          <small>Please check your internet connection and try again. If the problem persists, the server might be down.</small>
+        </div>
+      `;
     }
 
     if (resultCard) resultCard.style.display = "block";
@@ -323,18 +343,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (copyButton) {
     copyButton.addEventListener("click", () => {
-      const problemStatement =
-        problemStatementElement.textContent ||
-        problemStatementElement.innerText;
+      const problemStatement = problemStatementElement.textContent || problemStatementElement.innerText;
 
-      navigator.clipboard
-        .writeText(problemStatement)
+      navigator.clipboard.writeText(problemStatement)
         .then(() => {
           showToast("Copied to clipboard!");
-
           const originalText = copyButton.innerHTML;
           copyButton.innerHTML = '<i class="fas fa-check"></i> Copied';
-
           setTimeout(() => {
             copyButton.innerHTML = originalText;
           }, 2000);
@@ -343,95 +358,6 @@ document.addEventListener("DOMContentLoaded", () => {
           console.error("Failed to copy:", err);
           showToast("Failed to copy to clipboard", "error");
         });
-    });
-  }
-
-  if (saveButton) {
-    saveButton.addEventListener("click", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const token = localStorage.getItem("authToken");
-      const user = getUserFromStorage();
-
-      console.log("Save button clicked - Token:", !!token, "User:", !!user);
-
-      if (!token || !user) {
-        showToast("Please login to save ideas", "error");
-        setTimeout(() => {
-          window.location.href = "../pages/login.html";
-        }, 1500);
-        return;
-      }
-
-      if (!currentGeneratedIdeas || !currentFormData) {
-        showToast("No ideas to save. Please generate ideas first.", "error");
-        return;
-      }
-
-      try {
-        const originalText = saveButton.innerHTML;
-        saveButton.innerHTML =
-          '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        saveButton.disabled = true;
-
-        const savePromises = currentGeneratedIdeas.map(async (idea, index) => {
-          const title = extractTitleFromContent(idea.content, index);
-
-          const saveData = {
-            title: title,
-            description: idea.content,
-            language: currentFormData.techStack,
-            hardware:
-              currentFormData.hardwareComponents === "None"
-                ? null
-                : currentFormData.hardwareComponents,
-            domain: currentFormData.domain || null,
-          };
-
-          console.log("Saving idea:", saveData);
-
-          const response = await fetch(`${API_BASE_URL}/api/ideas/save`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(saveData),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(
-              errorData.error || `Failed to save idea ${index + 1}`
-            );
-          }
-
-          return await response.json();
-        });
-
-        const savedIdeas = await Promise.all(savePromises);
-
-        const ideaCount = savedIdeas.length;
-        showToast(
-          `Successfully saved ${ideaCount} idea${
-            ideaCount > 1 ? "s" : ""
-          } to your profile!`
-        );
-
-        saveButton.innerHTML = '<i class="fas fa-check"></i> Saved';
-        setTimeout(() => {
-          saveButton.innerHTML = originalText;
-          saveButton.disabled = false;
-        }, 2000);
-      } catch (error) {
-        console.error("Save error:", error);
-        showToast(`Failed to save ideas: ${error.message}`, "error");
-
-        const originalText = '<i class="fas fa-save"></i> Save to Favorites';
-        saveButton.innerHTML = originalText;
-        saveButton.disabled = false;
-      }
     });
   }
 
@@ -465,18 +391,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/^-\s*/, "")
       .trim();
 
-    if (
-      cleanFirstLine &&
-      cleanFirstLine.length > 5 &&
-      cleanFirstLine.length <= 100
-    ) {
+    if (cleanFirstLine && cleanFirstLine.length > 5 && cleanFirstLine.length <= 100) {
       return cleanFirstLine;
     }
 
-    const meaningfulContent = content
-      .replace(/\*\*/g, "")
-      .replace(/^\s*/, "")
-      .trim();
+    const meaningfulContent = content.replace(/\*\*/g, "").replace(/^\s*/, "").trim();
 
     if (meaningfulContent.length <= 50) {
       return meaningfulContent;
@@ -508,45 +427,43 @@ document.addEventListener("DOMContentLoaded", () => {
     const toast = document.createElement("div");
     toast.className = `toast-notification toast-${type}`;
     toast.innerHTML = `
-            <div class="toast-content">
-                <i class="fas fa-${
-                  type === "success" ? "check-circle" : "exclamation-circle"
-                }"></i>
-                <span>${message}</span>
-            </div>
-        `;
+      <div class="toast-content">
+        <i class="fas fa-${type === "success" ? "check-circle" : "exclamation-circle"}"></i>
+        <span>${message}</span>
+      </div>
+    `;
 
     toast.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === "success" ? "#28a745" : "#dc3545"};
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        `;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === "success" ? "#28a745" : "#dc3545"};
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+    `;
 
     if (!document.querySelector("#toast-styles")) {
       const style = document.createElement("style");
       style.id = "toast-styles";
       style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-                .toast-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-            `;
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+        .toast-content {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+      `;
       document.head.appendChild(style);
     }
 
@@ -560,24 +477,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 
-  testAPIConnection();
-
   async function testAPIConnection() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/health`);
       if (response.ok) {
         console.log("Backend connection successful");
       } else {
-        console.warn(
-          "Backend responded but with error status:",
-          response.status
-        );
+        console.warn("Backend responded but with error status:", response.status);
       }
     } catch (error) {
       console.warn("Backend connection failed:", error.message);
-      console.warn(
-        "Make sure your backend server is running on http://localhost:5000"
-      );
+      console.warn("Make sure your backend server is running on http://localhost:5000");
     }
   }
+
+  testAPIConnection();
 });
