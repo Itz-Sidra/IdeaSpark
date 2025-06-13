@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const copyButton = document.getElementById("copy-button");
   const saveButton = document.getElementById("save-button");
 
-  const API_BASE_URL = "http://localhost:5000";
+  const API_BASE_URL = "";
 
   let currentGeneratedIdeas = null;
   let currentFormData = null;
