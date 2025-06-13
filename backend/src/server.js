@@ -35,7 +35,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/ideas", ideasRoutes);
 
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
   res.json({
     message: "IdeaSpark API Server",
     version: "1.0.0",
@@ -54,6 +54,7 @@ app.get("/", (req, res) => {
     ],
   });
 });
+ */
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({
@@ -150,5 +151,40 @@ const server = app.listen(port, () => {
     );
   }
 });
+
+const path = require("path");
+
+// Serve static files (CSS, JS, images, etc.)
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Serve HTML pages
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/index.html"));
+});
+
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/about.html"));
+});
+
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/contact.html"));
+});
+
+app.get("/generate", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/generate.html"));
+});
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/login.html"));
+});
+
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/signup.html"));
+});
+
+app.get("/profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/html/profile.html"));
+});
+
 
 module.exports = app;
