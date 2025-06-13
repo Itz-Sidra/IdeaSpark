@@ -1,92 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Profile</title>
-  <link rel="stylesheet" href="../css/profile.css" />
-</head>
-<body>
-
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <div class="header-content">
-        <div class="logo">
-          <a href="index.html">IdeaSpark</a>
-        </div>
-        <nav>
-          <ul class="nav-menu">
-            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
-            <li class="nav-item"><a href="generate.html" class="nav-link">Generate Ideas</a></li>
-            <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-            <li class="nav-item logged-in auth-status active"><a href="profile.html" class="nav-link">Profile</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <!-- Profile Section -->
-  <div class="profile-container">
-    <div class="profile-header">
-      <h2 id="user-name">Welcome</h2>
-      <p id="user-email">Email:</p>
-      <button id="logout-btn" class="logout-btn">Logout</button>
-    </div>
-
-    <div class="profile-content">
-      <h3>Saved Ideas</h3>
-      <div id="ideas-grid" class="ideas-grid">
-        <!-- Ideas will be injected here -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <h2>IdeaSpark</h2>
-          <p>AI-powered project idea generator for tech and hardware-based projects.</p>
-        </div>
-
-        <div class="footer-links">
-          <div class="footer-column">
-            <h3>Site Map</h3>
-            <ul>
-              <li><a href="index.html">Home</a></li>
-              <li><a href="about.html">How It Works</a></li>
-              <li><a href="generate.html">Generate Ideas</a></li>
-            </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../css/profile.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <a href="index.html">IdeaSpark</a>
           </div>
-
-          <div class="footer-column">
-            <h3>Account</h3>
-            <ul>
-              <li><a href="profile.html">Profile</a></li>
+          <nav>
+            <ul class="nav-menu">
+              <li class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="about.html" class="nav-link">How It Works</a>
+              </li>
+              <li class="nav-item">
+                <a href="generate.html" class="nav-link">Generate Ideas</a>
+              </li>
+              <li class="nav-item">
+                <a href="contact.html" class="nav-link">Contact Us</a>
+              </li>
+              <li class="nav-item logged-in auth-status active">
+                <a href="profile.html" class="nav-link">Profile</a>
+              </li>
             </ul>
-          </div>
-
-          <div class="footer-column">
-            <h3>Contact</h3>
-            <ul>
-              <li><strong>Email:</strong> <a href="mailto:teamasep2@gmail.com">teamasep2@gmail.com</a></li>
-              <li><strong>Phone:</strong> +91 98765 43210</li>
-              <li><strong>Address:</strong> XYZ Institute, Tech Street, Bangalore, India</li>
-            </ul>
-          </div>
+          </nav>
         </div>
       </div>
+    </header>
 
-      <div class="footer-bottom">
-        <p>&copy; 2025 Idea Spark. All rights reserved.</p>
+    <div class="profile-container">
+      <div class="profile-header">
+        <h2 id="user-name">Welcome</h2>
+        <p id="user-email">Email:</p>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+      </div>
+
+      <div class="profile-content">
+        <h3>Saved Ideas</h3>
+        <div id="ideas-grid" class="ideas-grid"></div>
       </div>
     </div>
-  </footer>
 
-  <script src="../js/project.js"></script>
-</body>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>IdeaSpark</h2>
+            <p>
+              AI-powered project idea generator for tech and hardware-based
+              projects.
+            </p>
+          </div>
+
+          <div class="footer-links">
+            <div class="footer-column">
+              <h3>Site Map</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">How It Works</a></li>
+                <li><a href="generate.html">Generate Ideas</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-column">
+              <h3>Account</h3>
+              <ul>
+                <li><a href="profile.html">Profile</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-column">
+              <h3>Contact</h3>
+              <ul>
+                <li>
+                  <strong>Email:</strong>
+                  <a href="mailto:teamasep2@gmail.com">teamasep2@gmail.com</a>
+                </li>
+                <li><strong>Phone:</strong> +91 98765 43210</li>
+                <li>
+                  <strong>Address:</strong> XYZ Institute, Tech Street,
+                  Bangalore, India
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 Idea Spark. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/project.js"></script>
+  </body>
 </html>

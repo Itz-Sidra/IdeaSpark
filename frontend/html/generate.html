@@ -9,7 +9,6 @@
       content="Generate custom tech and hardware project ideas tailored to your skills and interests"
     />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,17 +16,14 @@
       rel="stylesheet"
     />
 
-    <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
 
-    <!-- Custom Styles - Fixed paths -->
     <link rel="stylesheet" href="../css/generate.css" />
   </head>
   <body>
-    <!-- Header -->
     <header class="header">
       <div class="container">
         <div class="header-content">
@@ -64,7 +60,6 @@
       </div>
     </header>
 
-    <!-- Main Content -->
     <main>
       <section class="page-hero">
         <div class="container">
@@ -196,37 +191,49 @@
             </div>
           </div>
 
-          <div id="result-container" class="results-container">
-            <div
-              id="loading-spinner"
-              class="loading-spinner"
-              style="display: none"
-            >
-              <div class="spinner"></div>
-              <p>Generating your AI-powered project ideas...</p>
-              <small>This may take a few seconds</small>
+          <section class="result-section">
+            <div class="container">
+              <div class="result-container">
+                <div class="result-form-container">
+                  <div id="result-container" class="results-container">
+                    <div
+                      id="loading-spinner"
+                      class="loading-spinner"
+                      style="display: none"
+                    >
+                      <div class="spinner"></div>
+                      <p>Generating your AI-powered project ideas...</p>
+                      <small>This may take a few seconds</small>
+                    </div>
+
+                    <div
+                      id="result-card"
+                      class="result-card"
+                      style="display: none"
+                    >
+                      <div class="result-header">
+                        <h2>Your Generated Project Ideas</h2>
+                        <p>AI-powered suggestions based on your requirements</p>
+                      </div>
+
+                      <div class="result-content">
+                        <div id="problem-statement"></div>
+                      </div>
+
+                      <div class="result-actions">
+                        <button id="copy-button" class="btn btn-outline">
+                          <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                        <button id="save-button" class="btn btn-primary">
+                          <i class="fas fa-save"></i> Save to Favorites
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div id="result-card" class="result-card" style="display: none">
-              <div class="result-header">
-                <h2>Your Generated Project Ideas</h2>
-                <p>AI-powered suggestions based on your requirements</p>
-              </div>
-
-              <div class="result-content">
-                <div id="problem-statement"></div>
-              </div>
-
-              <div class="result-actions">
-                <button id="copy-button" class="btn btn-outline">
-                  <i class="fas fa-copy"></i> Copy to Clipboard
-                </button>
-                <button id="save-button" class="btn btn-primary">
-                  <i class="fas fa-save"></i> Save to Favorites
-                </button>
-              </div>
-            </div>
-          </div>
+          </section>
 
           <div class="example-projects">
             <h2 class="section-title">Example Project Ideas</h2>
@@ -271,7 +278,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -320,7 +326,6 @@
       </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="../js/generator.js"></script>
   </body>
 </html>

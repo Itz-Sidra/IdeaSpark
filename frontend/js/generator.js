@@ -7,17 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const copyButton = document.getElementById("copy-button");
   const saveButton = document.getElementById("save-button");
 
-  // API Configuration
   const API_BASE_URL = "http://localhost:5000";
 
-  // Store current generated ideas globally for saving
   let currentGeneratedIdeas = null;
   let currentFormData = null;
 
-  // Check authentication status
   checkAuthStatus();
 
-  // Hamburger menu functionality
   const hamburger = document.querySelector(".hamburger");
   const navMenu = document.querySelector(".nav-menu");
 
@@ -33,11 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       try {
-        // Show loading state
         if (loadingSpinner) loadingSpinner.style.display = "block";
         if (resultCard) resultCard.style.display = "none";
 
-        // Gather form data
         const formData = {
           numberOfIdeas: parseInt(document.getElementById("number").value) || 1,
           techStack: document.getElementById("tech-stack").value,
@@ -49,10 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("additional-info").value || "",
         };
 
-        // Store form data globally for saving
         currentFormData = formData;
 
-        // Validate required fields
         if (!formData.techStack || !formData.complexity) {
           throw new Error(
             "Technology Stack and Complexity are required fields"
@@ -65,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Sending request with data:", formData);
 
-        // Make API call to backend
         const response = await fetch(`${API_BASE_URL}/api/ai/generate-ideas`, {
           method: "POST",
           headers: {
@@ -74,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify(formData),
         });
 
-        // Check if response is ok
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(
@@ -82,118 +72,96 @@ document.addEventListener("DOMContentLoaded", () => {
           );
         }
 
-        // Parse response
         const data = await response.json();
         console.log("Received response:", data);
 
-        // Store generated ideas globally for saving
         currentGeneratedIdeas = data.ideas;
 
-        // Update UI with generated ideas
         displayGeneratedIdeas(data);
 
-        // Hide loading, show result
         if (loadingSpinner) loadingSpinner.style.display = "none";
         if (resultCard) resultCard.style.display = "block";
 
-        // Update save button after ideas are generated
         updateSaveButton();
 
-        // Scroll to results
         resultContainer.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
         console.error("Error generating ideas:", error);
 
-        // Hide loading spinner
         if (loadingSpinner) loadingSpinner.style.display = "none";
 
-        // Show error message
         showErrorMessage(error.message);
       }
     });
   }
 
-  // Function to check authentication status
-  // Debug version of checkAuthStatus function
-function checkAuthStatus() {
-  // Debug: Log all localStorage keys
-  console.log("=== AUTH DEBUG ===");
-  console.log("All localStorage keys:", Object.keys(localStorage));
-  
-  // Check different possible token keys
-  const authToken = localStorage.getItem("authToken");
-  const token = localStorage.getItem("token");
-  const jwt = localStorage.getItem("jwt");
-  
-  console.log("authToken:", authToken);
-  console.log("token:", token);
-  console.log("jwt:", jwt);
-  
-  // Check user
-  const userStr = localStorage.getItem("user");
-  console.log("user string:", userStr);
-  
-  let user = null;
-  try {
-    user = userStr ? JSON.parse(userStr) : null;
-    console.log("parsed user:", user);
-  } catch (error) {
-    console.error("Error parsing user:", error);
+  function checkAuthStatus() {
+    console.log("=== AUTH DEBUG ===");
+    console.log("All localStorage keys:", Object.keys(localStorage));
+
+    const authToken = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
+    const jwt = localStorage.getItem("jwt");
+
+    console.log("authToken:", authToken);
+    console.log("token:", token);
+    console.log("jwt:", jwt);
+
+    const userStr = localStorage.getItem("user");
+    console.log("user string:", userStr);
+
+    let user = null;
+    try {
+      user = userStr ? JSON.parse(userStr) : null;
+      console.log("parsed user:", user);
+    } catch (error) {
+      console.error("Error parsing user:", error);
+    }
+
+    const finalToken = authToken || token || jwt;
+
+    console.log("Final token to use:", !!finalToken);
+    console.log("Final user to use:", !!user);
+    console.log("=== END DEBUG ===");
+
+    const authElements = document.querySelectorAll(".auth-status");
+    authElements.forEach((element) => {
+      if (finalToken && user) {
+        element.style.display = "block";
+      } else {
+        element.style.display = "none";
+      }
+    });
+
+    updateSaveButton(finalToken, user);
   }
 
-  // Use whichever token exists
-  const finalToken = authToken || token || jwt;
-  
-  console.log("Final token to use:", !!finalToken);
-  console.log("Final user to use:", !!user);
-  console.log("=== END DEBUG ===");
+  function updateSaveButton(token, user) {
+    const saveButton = document.getElementById("save-button");
+    if (!saveButton) return;
 
-  // Update navigation based on auth status
-  const authElements = document.querySelectorAll(".auth-status");
-  authElements.forEach((element) => {
-    if (finalToken && user) {
-      element.style.display = "block";
-    } else {
-      element.style.display = "none";
-    }
-  });
-
-  // Update save button based on auth status
-  updateSaveButton(finalToken, user);
-}
-
-// Updated updateSaveButton to accept parameters
-function updateSaveButton(token, user) {
-  const saveButton = document.getElementById('save-button');
-  if (!saveButton) return;
-
-  if (!token || !user) {
-    // User not authenticated
-    saveButton.disabled = true;
-    saveButton.innerHTML = '<i class="fas fa-lock"></i> Login to Save';
-    saveButton.onclick = () => {
-      showToast("Please login to save ideas", "error");
-      setTimeout(() => {
-        window.location.href = '../pages/login.html';
-      }, 1500);
-    };
-  } else {
-    // User is authenticated
-    saveButton.disabled = false;
-    saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
-    
-    // Remove the onclick and use the event listener instead
-    saveButton.onclick = null;
-    
-    // Check if ideas are available
-    if (!currentGeneratedIdeas || !currentFormData) {
+    if (!token || !user) {
       saveButton.disabled = true;
-      saveButton.innerHTML = '<i class="fas fa-save"></i> Generate Ideas First';
+      saveButton.innerHTML = '<i class="fas fa-lock"></i> Login to Save';
+      saveButton.onclick = () => {
+        showToast("Please login to save ideas", "error");
+        setTimeout(() => {
+          window.location.href = "../pages/login.html";
+        }, 1500);
+      };
+    } else {
+      saveButton.disabled = false;
+      saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
+      saveButton.onclick = null;
+
+      if (!currentGeneratedIdeas || !currentFormData) {
+        saveButton.disabled = true;
+        saveButton.innerHTML =
+          '<i class="fas fa-save"></i> Generate Ideas First';
+      }
     }
   }
-}
 
-  // Function to update save button based on auth status
   function updateSaveButton() {
     if (!saveButton) return;
 
@@ -201,33 +169,27 @@ function updateSaveButton(token, user) {
     const user = getUserFromStorage();
 
     if (!token || !user) {
-      // User not authenticated
       saveButton.disabled = true;
       saveButton.innerHTML = '<i class="fas fa-lock"></i> Login to Save';
       saveButton.onclick = () => {
         showToast("Please login to save ideas", "error");
-        // Optional: redirect to login page
         setTimeout(() => {
-          window.location.href = '../pages/login.html';
+          window.location.href = "../pages/login.html";
         }, 1500);
       };
     } else {
-      // User is authenticated
       saveButton.disabled = false;
       saveButton.innerHTML = '<i class="fas fa-save"></i> Save to Favorites';
-      
-      // Remove the onclick and use the event listener instead
       saveButton.onclick = null;
-      
-      // Check if ideas are available
+
       if (!currentGeneratedIdeas || !currentFormData) {
         saveButton.disabled = true;
-        saveButton.innerHTML = '<i class="fas fa-save"></i> Generate Ideas First';
+        saveButton.innerHTML =
+          '<i class="fas fa-save"></i> Generate Ideas First';
       }
     }
   }
 
-  // Function to get user from storage
   function getUserFromStorage() {
     try {
       const userStr = localStorage.getItem("user");
@@ -238,26 +200,27 @@ function updateSaveButton(token, user) {
     }
   }
 
-  // Function to display generated ideas in the UI
   function displayGeneratedIdeas(data) {
     if (data.success && data.ideas && data.ideas.length > 0) {
-      // For multiple ideas, we'll display them all
       let displayContent = "";
 
       if (data.ideas.length === 1) {
         displayContent = data.ideas[0].content;
       } else {
-        // If multiple ideas, format them nicely
         displayContent = data.ideas
           .map((idea, index) => {
-            return `**Idea ${index + 1}:**\n\n${idea.content}`;
+            let cleanContent = idea.content;
+            cleanContent = cleanContent.replace(
+              /^(PROJECT IDEA \d+:|IDEA \d+:|\*\*PROJECT IDEA \d+:\*\*|\*\*IDEA \d+:\*\*)\s*/i,
+              ""
+            );
+
+            return `**Project Idea ${index + 1}:**\n\n${cleanContent}`;
           })
-          .join("\n\n---\n\n");
+          .join("\n\n" + "=".repeat(50) + "\n\n");
       }
 
-      // Update the problem statement element
       if (problemStatementElement) {
-        // Convert markdown-style formatting to HTML for better display
         const formattedContent = formatMarkdownForDisplay(displayContent);
         problemStatementElement.innerHTML = formattedContent;
       }
@@ -266,29 +229,83 @@ function updateSaveButton(token, user) {
     }
   }
 
-  // Function to format markdown-style text for HTML display
   function formatMarkdownForDisplay(text) {
-    return (
-      text
-        // Bold text **text** -> <strong>text</strong>
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-        // Bullet points * text -> <li>text</li>
-        .replace(/^\*\s(.+)$/gm, "<li>$1</li>")
-        // Line breaks
-        .replace(/\n\n/g, "</p><p>")
-        // Wrap in paragraphs
-        .replace(/^/, "<p>")
-        .replace(/$/, "</p>")
-        // Handle lists
-        .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
-        // Clean up empty paragraphs
-        .replace(/<p><\/p>/g, "")
-        // Handle horizontal rules
-        .replace(/---/g, "<hr>")
-    );
+    let formattedText = text
+      .trim()
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      .replace(/\*\*([^*\n]+(?:\n[^*\n]*)*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*\n]+):\*/g, "<strong>$1:</strong>")
+      .replace(/\*([^*\n]+)\*/g, "<em>$1</em>")
+      .replace(/^\* (.+)$/gm, "<li>$1</li>")
+      .replace(/^- (.+)$/gm, "<li>$1</li>")
+      .replace(/^• (.+)$/gm, "<li>$1</li>")
+      .replace(/^\d+\. (.+)$/gm, "<li>$1</li>")
+      .replace(/^---+$/gm, "<hr>")
+      .replace(/^___+$/gm, "<hr>")
+      .replace(/^===+$/gm, "<hr>")
+      .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+      .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+      .replace(/^# (.+)$/gm, "<h1>$1</h1>")
+      .replace(/\n\n+/g, "</p><p>")
+      .replace(/\n/g, "<br>")
+      .replace(/^/, "<p>")
+      .replace(/$/, "</p>")
+      .replace(/(<li>.*?<\/li>)(<br>)?/gs, (match, listItem) => listItem)
+      .replace(/(<li>.*?<\/li>)(\s*<br>\s*<li>.*?<\/li>)*/gs, (match) => {
+        return "<ul>" + match.replace(/<br>/g, "") + "</ul>";
+      })
+
+      .replace(/<p><\/p>/g, "")
+      .replace(/<p>\s*<\/p>/g, "")
+      .replace(
+        /<p>(\s*<(?:h[1-6]|ul|ol|hr)[^>]*>.*?<\/(?:h[1-6]|ul|ol)>\s*)<\/p>/gs,
+        "$1"
+      )
+      .replace(/<p>(\s*<hr>\s*)<\/p>/gs, "$1")
+      .replace(/(<\/(?:h[1-6]|ul|ol|hr)>)\s*<br>/g, "$1")
+      .replace(/<br>\s*(<(?:h[1-6]|ul|ol|hr))/g, "$1")
+      .replace(/(<br>\s*){3,}/g, "<br><br>")
+      .replace(/\*\*/g, "");
+
+    return formattedText;
   }
 
-  // Function to show error messages
+  function displayGeneratedIdeas(data) {
+    if (data.success && data.ideas && data.ideas.length > 0) {
+      let displayContent = "";
+
+      if (data.ideas.length === 1) {
+        displayContent = cleanupIdeaContent(data.ideas[0].content);
+      } else {
+        displayContent = data.ideas
+          .map((idea, index) => {
+            let cleanContent = cleanupIdeaContent(idea.content);
+
+            return `**Project Idea ${index + 1}:**\n\n${cleanContent}`;
+          })
+          .join("\n\n" + "=".repeat(50) + "\n\n");
+      }
+      if (problemStatementElement) {
+        const formattedContent = formatMarkdownForDisplay(displayContent);
+        problemStatementElement.innerHTML = formattedContent;
+      }
+    } else {
+      throw new Error("No ideas were generated. Please try again.");
+    }
+  }
+
+  function cleanupIdeaContent(content) {
+    return content
+      .replace(
+        /^(PROJECT IDEA \d+:|IDEA \d+:|\*\*PROJECT IDEA \d+:\*\*|\*\*IDEA \d+:\*\*)\s*/i,
+        ""
+      )
+      .replace(/^([^*\n]+)\*\*\s*/gm, "$1")
+      .replace(/\*\*\s*$/gm, "")
+      .replace(/\*\*(?!\s*[^*\n]+\s*\*\*)/g, "")
+      .trim();
+  }
   function showErrorMessage(message) {
     if (problemStatementElement) {
       problemStatementElement.innerHTML = `
@@ -304,10 +321,8 @@ function updateSaveButton(token, user) {
     showToast(message, "error");
   }
 
-  // Copy button handler
   if (copyButton) {
     copyButton.addEventListener("click", () => {
-      // Get the text content (without HTML formatting)
       const problemStatement =
         problemStatementElement.textContent ||
         problemStatementElement.innerText;
@@ -317,7 +332,6 @@ function updateSaveButton(token, user) {
         .then(() => {
           showToast("Copied to clipboard!");
 
-          // Visual feedback
           const originalText = copyButton.innerHTML;
           copyButton.innerHTML = '<i class="fas fa-check"></i> Copied';
 
@@ -332,10 +346,8 @@ function updateSaveButton(token, user) {
     });
   }
 
-  // Updated save button handler - saves to database
   if (saveButton) {
     saveButton.addEventListener("click", async (e) => {
-      // Prevent any default behavior
       e.preventDefault();
       e.stopPropagation();
 
@@ -347,7 +359,7 @@ function updateSaveButton(token, user) {
       if (!token || !user) {
         showToast("Please login to save ideas", "error");
         setTimeout(() => {
-          window.location.href = '../pages/login.html';
+          window.location.href = "../pages/login.html";
         }, 1500);
         return;
       }
@@ -358,15 +370,12 @@ function updateSaveButton(token, user) {
       }
 
       try {
-        // Show loading state on button
         const originalText = saveButton.innerHTML;
         saveButton.innerHTML =
           '<i class="fas fa-spinner fa-spin"></i> Saving...';
         saveButton.disabled = true;
 
-        // If multiple ideas, save each one separately
         const savePromises = currentGeneratedIdeas.map(async (idea, index) => {
-          // Extract title from the idea content (first line or first few words)
           const title = extractTitleFromContent(idea.content, index);
 
           const saveData = {
@@ -401,10 +410,8 @@ function updateSaveButton(token, user) {
           return await response.json();
         });
 
-        // Wait for all ideas to be saved
         const savedIdeas = await Promise.all(savePromises);
 
-        // Show success message
         const ideaCount = savedIdeas.length;
         showToast(
           `Successfully saved ${ideaCount} idea${
@@ -412,7 +419,6 @@ function updateSaveButton(token, user) {
           } to your profile!`
         );
 
-        // Reset button
         saveButton.innerHTML = '<i class="fas fa-check"></i> Saved';
         setTimeout(() => {
           saveButton.innerHTML = originalText;
@@ -422,7 +428,6 @@ function updateSaveButton(token, user) {
         console.error("Save error:", error);
         showToast(`Failed to save ideas: ${error.message}`, "error");
 
-        // Reset button
         const originalText = '<i class="fas fa-save"></i> Save to Favorites';
         saveButton.innerHTML = originalText;
         saveButton.disabled = false;
@@ -430,45 +435,36 @@ function updateSaveButton(token, user) {
     });
   }
 
-  // Function to extract title from idea content
   function extractTitleFromContent(content, index) {
-    // Try to find a title pattern like "**Project Title:** Something"
     const titleMatch = content.match(/\*\*Project Title:\*\*\s*(.+?)(?:\n|$)/i);
     if (titleMatch) {
       return titleMatch[1].trim();
     }
 
-    // Try to find other title patterns like "**Title:** Something"
     const titleMatch2 = content.match(/\*\*Title:\*\*\s*(.+?)(?:\n|$)/i);
     if (titleMatch2) {
       return titleMatch2[1].trim();
     }
 
-    // Try to find any bold text at the beginning (likely a title)
     const boldMatch = content.match(/^\*\*(.+?)\*\*/);
     if (boldMatch) {
       return boldMatch[1].trim();
     }
 
-    // Try to find patterns like "Project: Something" or "Idea: Something"
     const projectMatch = content.match(/(?:Project|Idea):\s*(.+?)(?:\n|$)/i);
     if (projectMatch) {
       return projectMatch[1].trim();
     }
 
-    // Fallback: use first line or first 50 characters
     const firstLine = content.split("\n")[0].trim();
-
-    // Clean up any markdown formatting from the first line
     const cleanFirstLine = firstLine
-      .replace(/^\*\*|\*\*$/g, "") // Remove bold markers
-      .replace(/^\*|\*$/g, "") // Remove italic markers
-      .replace(/^#+\s*/, "") // Remove heading markers
-      .replace(/^\d+\.\s*/, "") // Remove numbered list markers
-      .replace(/^-\s*/, "") // Remove bullet point markers
+      .replace(/^\*\*|\*\*$/g, "")
+      .replace(/^\*|\*$/g, "")
+      .replace(/^#+\s*/, "")
+      .replace(/^\d+\.\s*/, "")
+      .replace(/^-\s*/, "")
       .trim();
 
-    // If the cleaned first line is reasonable length, use it
     if (
       cleanFirstLine &&
       cleanFirstLine.length > 5 &&
@@ -477,47 +473,38 @@ function updateSaveButton(token, user) {
       return cleanFirstLine;
     }
 
-    // If first line is too short or too long, extract first 50 meaningful characters
     const meaningfulContent = content
-      .replace(/\*\*/g, "") // Remove bold markers
-      .replace(/^\s*/, "") // Remove leading whitespace
+      .replace(/\*\*/g, "")
+      .replace(/^\s*/, "")
       .trim();
 
     if (meaningfulContent.length <= 50) {
       return meaningfulContent;
     }
 
-    // Find a good breaking point (end of sentence or word)
     let title = meaningfulContent.substring(0, 50);
     const lastSpace = title.lastIndexOf(" ");
     const lastPeriod = title.lastIndexOf(".");
     const lastComma = title.lastIndexOf(",");
 
-    // Use the latest breaking point that makes sense
     const breakPoint = Math.max(lastPeriod, lastComma, lastSpace);
     if (breakPoint > 20) {
-      // Only use breaking point if it's not too early
       title = title.substring(0, breakPoint);
     }
 
-    // Add ellipsis if we truncated
     if (title.length < meaningfulContent.length && !title.endsWith(".")) {
       title += "...";
     }
 
-    // Final fallback: generic title with index
     return title || `Generated Project Idea ${index + 1}`;
   }
 
-  // Toast notification function
   function showToast(message, type = "success") {
-    // Remove existing toast if any
     const existingToast = document.querySelector(".toast-notification");
     if (existingToast) {
       existingToast.remove();
     }
 
-    // Create toast element
     const toast = document.createElement("div");
     toast.className = `toast-notification toast-${type}`;
     toast.innerHTML = `
@@ -529,7 +516,6 @@ function updateSaveButton(token, user) {
             </div>
         `;
 
-    // Add styles
     toast.style.cssText = `
             position: fixed;
             top: 20px;
@@ -543,7 +529,6 @@ function updateSaveButton(token, user) {
             animation: slideIn 0.3s ease-out;
         `;
 
-    // Add animation styles if not already present
     if (!document.querySelector("#toast-styles")) {
       const style = document.createElement("style");
       style.id = "toast-styles";
@@ -565,10 +550,8 @@ function updateSaveButton(token, user) {
       document.head.appendChild(style);
     }
 
-    // Add to page
     document.body.appendChild(toast);
 
-    // Remove after 3 seconds
     setTimeout(() => {
       toast.style.animation = "slideOut 0.3s ease-in";
       setTimeout(() => {
@@ -577,22 +560,21 @@ function updateSaveButton(token, user) {
     }, 3000);
   }
 
-  // Test API connection on page load (optional)
   testAPIConnection();
 
   async function testAPIConnection() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/health`);
       if (response.ok) {
-        console.log("✅ Backend connection successful");
+        console.log("Backend connection successful");
       } else {
         console.warn(
-          "⚠️ Backend responded but with error status:",
+          "Backend responded but with error status:",
           response.status
         );
       }
     } catch (error) {
-      console.warn("⚠️ Backend connection failed:", error.message);
+      console.warn("Backend connection failed:", error.message);
       console.warn(
         "Make sure your backend server is running on http://localhost:5000"
       );

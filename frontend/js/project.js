@@ -7,13 +7,12 @@ window.addEventListener("DOMContentLoaded", function () {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
       if (confirm("Are you sure you want to logout?")) {
-        // Clear all authentication data
         localStorage.removeItem("user");
         localStorage.removeItem("authToken");
         localStorage.removeItem("token");
         localStorage.removeItem("jwt");
-        localStorage.removeItem("savedIdeas"); // Keep this for any legacy cleanup
-        
+        localStorage.removeItem("savedIdeas");
+
         alert("You have been logged out successfully!");
         window.location.href = "index.html";
       }
@@ -21,18 +20,15 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// API Configuration
 const API_BASE_URL = "http://localhost:5000";
-
-// Global storage for full idea data
 let fullIdeasData = {};
 
 function checkAuthStatus() {
   const user = getUserFromStorage();
   const token = getAuthToken();
-  
+
   console.log("Auth check - User:", !!user, "Token:", !!token);
-  
+
   if (!user || !token) {
     alert("Please log in to access your profile.");
     window.location.href = "login.html";
@@ -51,10 +47,11 @@ function getUserFromStorage() {
 }
 
 function getAuthToken() {
-  // Check different possible token keys (same as in generator.js)
-  return localStorage.getItem("authToken") || 
-         localStorage.getItem("token") || 
-         localStorage.getItem("jwt");
+  return (
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("token") ||
+    localStorage.getItem("jwt")
+  );
 }
 
 function loadUserProfile() {
@@ -68,7 +65,7 @@ function loadUserProfile() {
 async function loadSavedIdeas() {
   const ideasGrid = document.getElementById("ideas-grid");
   const token = getAuthToken();
-  
+
   if (!token) {
     console.error("No auth token found");
     ideasGrid.innerHTML = `
@@ -81,7 +78,6 @@ async function loadSavedIdeas() {
   }
 
   try {
-    // Show loading state
     ideasGrid.innerHTML = `
       <div class="loading-state">
         <p>Loading your saved ideas...</p>
@@ -89,28 +85,29 @@ async function loadSavedIdeas() {
     `;
 
     console.log("Fetching ideas from API...");
-    
+
     const response = await fetch(`${API_BASE_URL}/api/ideas/my-ideas`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
 
     console.log("API Response status:", response.status);
 
     if (!response.ok) {
       if (response.status === 401) {
-        // Token is invalid or expired
         alert("Your session has expired. Please log in again.");
         localStorage.clear();
         window.location.href = "login.html";
         return;
       }
-      
+
       const errorData = await response.json();
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`
+      );
     }
 
     const data = await response.json();
@@ -121,7 +118,6 @@ async function loadSavedIdeas() {
     } else {
       throw new Error("Invalid response format");
     }
-
   } catch (error) {
     console.error("Error loading saved ideas:", error);
     ideasGrid.innerHTML = `
@@ -131,18 +127,14 @@ async function loadSavedIdeas() {
         <button onclick="loadSavedIdeas()" class="retry-btn">Try Again</button>
       </div>
     `;
-    
-    // Show toast notification
     showToast("Failed to load saved ideas: " + error.message, "error");
   }
 }
 
 function displaySavedIdeas(ideas) {
   const ideasGrid = document.getElementById("ideas-grid");
-  
-  // Clear and populate fullIdeasData
   fullIdeasData = {};
-  
+
   if (!ideas || ideas.length === 0) {
     ideasGrid.innerHTML = `
       <div class="no-ideas">
@@ -153,20 +145,32 @@ function displaySavedIdeas(ideas) {
     return;
   }
 
-  // Store full idea data for modal viewing
-  ideas.forEach(idea => {
+  ideas.forEach((idea) => {
     fullIdeasData[idea.id] = idea;
   });
 
   ideasGrid.innerHTML = ideas
-    .map((idea) => `
-      <div class="idea-card" data-idea-id="${idea.id}" data-full-description="${escapeHtml(idea.description)}">
+    .map(
+      (idea) => `
+      <div class="idea-card" data-idea-id="${
+        idea.id
+      }" data-full-description="${escapeHtml(idea.description)}">
         <div class="idea-header">
           <h4 class="idea-title">${escapeHtml(idea.title)}</h4>
           <div class="idea-meta">
             <span class="tech-badge">${escapeHtml(idea.language)}</span>
-            ${idea.hardware ? `<span class="hardware-badge">${escapeHtml(idea.hardware)}</span>` : ''}
-            ${idea.domain ? `<span class="domain-badge">${escapeHtml(idea.domain)}</span>` : ''}
+            ${
+              idea.hardware
+                ? `<span class="hardware-badge">${escapeHtml(
+                    idea.hardware
+                  )}</span>`
+                : ""
+            }
+            ${
+              idea.domain
+                ? `<span class="domain-badge">${escapeHtml(idea.domain)}</span>`
+                : ""
+            }
           </div>
         </div>
         
@@ -175,7 +179,9 @@ function displaySavedIdeas(ideas) {
         </div>
         
         <div class="idea-footer">
-          <small class="idea-date">Saved on ${formatDate(idea.createdAt)}</small>
+          <small class="idea-date">Saved on ${formatDate(
+            idea.createdAt
+          )}</small>
           <div class="idea-actions">
             <button class="view-btn" onclick="viewFullIdea('${idea.id}')">
               <i class="fas fa-eye"></i> View Full
@@ -189,67 +195,61 @@ function displaySavedIdeas(ideas) {
           </div>
         </div>
       </div>
-    `)
+    `
+    )
     .join("");
 }
 
-// Helper function to escape HTML to prevent XSS
 function escapeHtml(text) {
-  if (!text) return '';
+  if (!text) return "";
   const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
   };
-  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+  return text.replace(/[&<>"']/g, function (m) {
+    return map[m];
+  });
 }
 
-// Helper function to format description (truncate if too long)
 function formatDescription(description, truncate = true) {
-  if (!description) return '';
-  
-  // Remove markdown formatting for display
+  if (!description) return "";
   let cleanDesc = description
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-    .replace(/\n/g, '<br>'); // Line breaks
-  
-  // Only truncate if requested (for card display)
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/\n/g, "<br>");
   if (truncate && cleanDesc.length > 300) {
-    cleanDesc = cleanDesc.substring(0, 300) + '...';
+    cleanDesc = cleanDesc.substring(0, 300) + "...";
   }
-  
+
   return cleanDesc;
 }
 
-// Helper function to format date
 function formatDate(dateString) {
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   } catch (error) {
-    return 'Unknown date';
+    return "Unknown date";
   }
 }
 
-// Function to view full idea details
 function viewFullIdea(ideaId) {
   const fullIdea = fullIdeasData[ideaId];
   if (!fullIdea) {
-    console.error('Full idea data not found for ID:', ideaId);
+    console.error("Full idea data not found for ID:", ideaId);
     showToast("Error: Idea data not found", "error");
     return;
   }
 
-  // Create a modal with the full description
-  const modal = document.createElement('div');
-  modal.className = 'idea-modal';
+  const modal = document.createElement("div");
+  modal.className = "idea-modal";
   modal.innerHTML = `
     <div class="modal-content">
       <div class="modal-header">
@@ -261,10 +261,25 @@ function viewFullIdea(ideaId) {
       <div class="modal-body">
         <div class="idea-meta-full">
           <span class="tech-badge">${escapeHtml(fullIdea.language)}</span>
-          ${fullIdea.hardware ? `<span class="hardware-badge">${escapeHtml(fullIdea.hardware)}</span>` : ''}
-          ${fullIdea.domain ? `<span class="domain-badge">${escapeHtml(fullIdea.domain)}</span>` : ''}
+          ${
+            fullIdea.hardware
+              ? `<span class="hardware-badge">${escapeHtml(
+                  fullIdea.hardware
+                )}</span>`
+              : ""
+          }
+          ${
+            fullIdea.domain
+              ? `<span class="domain-badge">${escapeHtml(
+                  fullIdea.domain
+                )}</span>`
+              : ""
+          }
         </div>
-        <div class="full-description">${formatDescription(fullIdea.description, false)}</div>
+        <div class="full-description">${formatDescription(
+          fullIdea.description,
+          false
+        )}</div>
       </div>
       <div class="modal-actions">
         <button onclick="copyFullIdeaText('${ideaId}')" class="copy-btn">
@@ -276,66 +291,71 @@ function viewFullIdea(ideaId) {
       </div>
     </div>
   `;
-  
-  // Close modal when clicking outside
-  modal.addEventListener('click', function(e) {
+
+  modal.addEventListener("click", function (e) {
     if (e.target === modal) {
       modal.remove();
     }
   });
-  
+
   document.body.appendChild(modal);
 }
 
-// Helper function to close modal
 function closeModal(element) {
-  const modal = element.closest('.idea-modal');
+  const modal = element.closest(".idea-modal");
   if (modal) {
     modal.remove();
   }
 }
 
-// Function to copy idea text from card
 function copyIdeaText(ideaId) {
   const fullIdea = fullIdeasData[ideaId];
   if (!fullIdea) {
-    console.error('Full idea data not found for copying');
+    console.error("Full idea data not found for copying");
     showToast("Error: Idea data not found", "error");
     return;
   }
-  
+
   const fullText = `${fullIdea.title}\n\n${fullIdea.description}`;
-  
-  navigator.clipboard.writeText(fullText).then(() => {
-    showToast("Idea copied to clipboard!");
-  }).catch((error) => {
-    console.error("Copy failed:", error);
-    showToast("Failed to copy to clipboard", "error");
-  });
+
+  navigator.clipboard
+    .writeText(fullText)
+    .then(() => {
+      showToast("Idea copied to clipboard!");
+    })
+    .catch((error) => {
+      console.error("Copy failed:", error);
+      showToast("Failed to copy to clipboard", "error");
+    });
 }
 
-// Function to copy full idea text from modal
 function copyFullIdeaText(ideaId) {
   const fullIdea = fullIdeasData[ideaId];
   if (!fullIdea) {
-    console.error('Full idea data not found for copying');
+    console.error("Full idea data not found for copying");
     showToast("Error: Idea data not found", "error");
     return;
   }
-  
+
   const fullText = `${fullIdea.title}\n\n${fullIdea.description}`;
-  
-  navigator.clipboard.writeText(fullText).then(() => {
-    showToast("Full idea copied to clipboard!");
-  }).catch((error) => {
-    console.error("Copy failed:", error);
-    showToast("Failed to copy to clipboard", "error");
-  });
+
+  navigator.clipboard
+    .writeText(fullText)
+    .then(() => {
+      showToast("Full idea copied to clipboard!");
+    })
+    .catch((error) => {
+      console.error("Copy failed:", error);
+      showToast("Failed to copy to clipboard", "error");
+    });
 }
 
-// Updated delete function to use API
 async function deleteIdea(ideaId) {
-  if (!confirm("Are you sure you want to remove this idea? This action cannot be undone.")) {
+  if (
+    !confirm(
+      "Are you sure you want to remove this idea? This action cannot be undone."
+    )
+  ) {
     return;
   }
 
@@ -347,18 +367,20 @@ async function deleteIdea(ideaId) {
 
   try {
     console.log("Deleting idea:", ideaId);
-    
+
     const response = await fetch(`${API_BASE_URL}/api/ideas/delete/${ideaId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.error || `HTTP error! status: ${response.status}`
+      );
     }
 
     const data = await response.json();
@@ -366,37 +388,33 @@ async function deleteIdea(ideaId) {
 
     if (data.success) {
       showToast("Idea removed successfully!");
-      // Reload the ideas to reflect the change
       loadSavedIdeas();
     } else {
       throw new Error("Failed to delete idea");
     }
-
   } catch (error) {
     console.error("Error deleting idea:", error);
     showToast("Failed to remove idea: " + error.message, "error");
   }
 }
 
-// Toast notification function
 function showToast(message, type = "success") {
-  // Remove existing toast if any
   const existingToast = document.querySelector(".toast-notification");
   if (existingToast) {
     existingToast.remove();
   }
 
-  // Create toast element
   const toast = document.createElement("div");
   toast.className = `toast-notification toast-${type}`;
   toast.innerHTML = `
     <div class="toast-content">
-      <i class="fas fa-${type === "success" ? "check-circle" : "exclamation-circle"}"></i>
+      <i class="fas fa-${
+        type === "success" ? "check-circle" : "exclamation-circle"
+      }"></i>
       <span>${message}</span>
     </div>
   `;
 
-  // Add styles
   toast.style.cssText = `
     position: fixed;
     top: 20px;
@@ -410,7 +428,6 @@ function showToast(message, type = "success") {
     animation: slideIn 0.3s ease-out;
   `;
 
-  // Add animation styles if not already present
   if (!document.querySelector("#toast-styles")) {
     const style = document.createElement("style");
     style.id = "toast-styles";
@@ -499,10 +516,8 @@ function showToast(message, type = "success") {
     document.head.appendChild(style);
   }
 
-  // Add to page
   document.body.appendChild(toast);
 
-  // Remove after 3 seconds
   setTimeout(() => {
     toast.style.animation = "slideOut 0.3s ease-in";
     setTimeout(() => {

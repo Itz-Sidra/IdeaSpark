@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Connection Test</title>
-</head>
-<body>
-  <h1>Backend Connection Test</h1>
-  <button id="testButton">Test Connection</button>
-  <div id="result"></div>
+  <head>
+    <title>Connection Test</title>
+  </head>
+  <body>
+    <h1>Backend Connection Test</h1>
+    <button id="testButton">Test Connection</button>
+    <div id="result"></div>
 
-  <script>
-    document.getElementById('testButton').addEventListener('click', async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/test');
-        const data = await response.json();
-        document.getElementById('result').textContent = 'Success: ' + data.message;
-      } catch (error) {
-        document.getElementById('result').textContent = 'Error: ' + error.message;
-      }
-    });
-  </script>
-</body>
+    <script>
+      document
+        .getElementById("testButton")
+        .addEventListener("click", async () => {
+          try {
+            const response = await fetch("http://localhost:5000/api/test");
+            const data = await response.json();
+            document.getElementById("result").textContent =
+              "Success: " + data.message;
+          } catch (error) {
+            document.getElementById("result").textContent =
+              "Error: " + error.message;
+          }
+        });
+    </script>
+  </body>
 </html>

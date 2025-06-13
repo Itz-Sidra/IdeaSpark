@@ -1,278 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IdeaSpark - Project Idea Generator</title>
-    <meta name="description" content="Generate innovative tech project ideas tailored to your interests and skill level">
-    <link rel="stylesheet" href="../css/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Header / Navbar -->
+    <meta
+      name="description"
+      content="Generate innovative tech project ideas tailored to your interests and skill level"
+    />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index.html">IdeaSpark</a>
-                </div>
-                <nav>
-                    <ul class="nav-menu">
-                        <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
-                        <li class="nav-item"><a href="about.html" class="nav-link">How It Works</a></li>
-                        <li class="nav-item"><a href="generate.html" class="nav-link">Generate Idea</a></li>
-                        <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li>
-                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile</a></li>
-
-                        <!--
-                        <li class="nav-item logged-in auth-status"><a href="profile.html" class="nav-link">Profile (<span class="username">User</span>)</a></li>
-                        -->
-                        
-                    </ul>
-                    <div class="hamburger">
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                        <span class="bar"></span>
-                    </div>
-                </nav>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <a href="index.html">IdeaSpark</a>
+          </div>
+          <nav>
+            <ul class="nav-menu">
+              <li class="nav-item">
+                <a href="index.html" class="nav-link active">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="about.html" class="nav-link">How It Works</a>
+              </li>
+              <li class="nav-item">
+                <a href="generate.html" class="nav-link">Generate Idea</a>
+              </li>
+              <li class="nav-item">
+                <a href="contact.html" class="nav-link">Contact Us</a>
+              </li>
+              <li class="nav-item logged-in auth-status">
+                <a href="profile.html" class="nav-link">Profile</a>
+              </li>
+            </ul>
+            <div class="hamburger">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
             </div>
+          </nav>
         </div>
+      </div>
     </header>
 
-    <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1 class="hero-title">Generate Innovative Project Ideas</h1>
-                        <p class="hero-description">Get project suggestions for your next hardware or software development challenge. Perfect for students, hobbyists, and professionals.</p>
-                        <div class="hero-buttons">
-                            <a href="generate.html" class="btn btn-primary">Generate Ideas</a>
-                            <a href="#how-it-works" class="btn btn-outline">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="../assests/demo.jpg" alt="Project Idea Generator" />
-                    </div>
-                </div>
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-content">
+            <div class="hero-text">
+              <h1 class="hero-title">Generate Innovative Project Ideas</h1>
+              <p class="hero-description">
+                Get project suggestions for your next hardware or software
+                development challenge. Perfect for students, hobbyists, and
+                professionals.
+              </p>
+              <div class="hero-buttons">
+                <a href="generate.html" class="btn btn-primary"
+                  >Generate Ideas</a
+                >
+                <a href="#how-it-works" class="btn btn-outline">Learn More</a>
+              </div>
             </div>
-        </section>
+            <div class="hero-image">
+              <img src="../assests/demo.jpg" alt="Project Idea Generator" />
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Features Section -->
-        <section class="features-section" id="features">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Why Choose IdeaSpark?</h2>
-                    <p class="section-description">Our platform is designed to help you find the perfect tech project</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3 class="feature-title">Get Ideas</h3>
-                        <p class="feature-description">Get project suggestions customized to your skills and interests</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3 class="feature-title">Technical Depth</h3>
-                        <p class="feature-description">From beginner to advanced, get ideas that match your expertise</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h3 class="feature-title">Hardware Focus</h3>
-                        <p class="feature-description">Specialized in IoT, embedded systems, and electronics projects</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="feature-title">Instant Generation</h3>
-                        <p class="feature-description">Get project ideas in seconds through our embedded algorithm</p>
-                    </div>
-                </div>
+      <section class="features-section" id="features">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Why Choose IdeaSpark?</h2>
+            <p class="section-description">
+              Our platform is designed to help you find the perfect tech project
+            </p>
+          </div>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <h3 class="feature-title">Get Ideas</h3>
+              <p class="feature-description">
+                Get project suggestions customized to your skills and interests
+              </p>
             </div>
-        </section>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <h3 class="feature-title">Technical Depth</h3>
+              <p class="feature-description">
+                From beginner to advanced, get ideas that match your expertise
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <h3 class="feature-title">Hardware Focus</h3>
+              <p class="feature-description">
+                Specialized in IoT, embedded systems, and electronics projects
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <h3 class="feature-title">Instant Generation</h3>
+              <p class="feature-description">
+                Get project ideas in seconds through our embedded algorithm
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Testimonials Section -->
-        <section class="testimonials-section" id="testimonials">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">What Our Users Say</h2>
-                    <p class="section-description">Hear from students and professionals who use IdeaSpark</p>
+      <section class="testimonials-section" id="testimonials">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">What Our Users Say</h2>
+            <p class="section-description">
+              Hear from students and professionals who use IdeaSpark
+            </p>
+          </div>
+          <div class="testimonials-slider">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "IdeaSpark helped me find the perfect project for my senior
+                  thesis. The suggestions were innovative and matched my skill
+                  level perfectly."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img
+                  src="img/testimonial1.jpg"
+                  alt="Sarah J."
+                  class="testimonial-avatar"
+                />
+                <div class="testimonial-info">
+                  <h4>Sarah J.</h4>
+                  <p>Computer Engineering Student</p>
                 </div>
-                <div class="testimonials-slider">
-                    <div class="testimonial-card">
-                        <div class="testimonial-content">
-                            <p>"IdeaSpark helped me find the perfect project for my senior thesis. The suggestions were innovative and matched my skill level perfectly."</p>
-                        </div>
-                        <div class="testimonial-author">
-                            <img src="img/testimonial1.jpg" alt="Sarah J." class="testimonial-avatar" />
-                            <div class="testimonial-info">
-                                <h4>Sarah J.</h4>
-                                <p>Computer Engineering Student</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-content">
-                            <p>"As a professor, I recommend IdeaSpark to all my students. It gives them practical project ideas that align with our curriculum."</p>
-                        </div>
-                        <div class="testimonial-author">
-                            <img src="img/testimonial2.jpg" alt="Prof. Michael T." class="testimonial-avatar" />
-                            <div class="testimonial-info">
-                                <h4>Prof. Michael T.</h4>
-                                <p>University Professor</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-content">
-                            <p>"I use IdeaSpark to find weekend projects to improve my skills. Every suggestion has taught me something new and valuable."</p>
-                        </div>
-                        <div class="testimonial-author">
-                            <img src="img/testimonial3.jpg" alt="David K." class="testimonial-avatar" />
-                            <div class="testimonial-info">
-                                <h4>David K.</h4>
-                                <p>Software Developer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-navigation">
-                    <button class="prev-testimonial" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
-                    <div class="testimonial-dots">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                    </div>
-                    <button class="next-testimonial" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
-                </div>
+              </div>
             </div>
-        </section>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "As a professor, I recommend IdeaSpark to all my students. It
+                  gives them practical project ideas that align with our
+                  curriculum."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img
+                  src="img/testimonial2.jpg"
+                  alt="Prof. Michael T."
+                  class="testimonial-avatar"
+                />
+                <div class="testimonial-info">
+                  <h4>Prof. Michael T.</h4>
+                  <p>University Professor</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "I use IdeaSpark to find weekend projects to improve my
+                  skills. Every suggestion has taught me something new and
+                  valuable."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img
+                  src="img/testimonial3.jpg"
+                  alt="David K."
+                  class="testimonial-avatar"
+                />
+                <div class="testimonial-info">
+                  <h4>David K.</h4>
+                  <p>Software Developer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-navigation">
+            <button class="prev-testimonial" aria-label="Previous testimonial">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="testimonial-dots">
+              <span class="dot active" data-index="0"></span>
+              <span class="dot" data-index="1"></span>
+              <span class="dot" data-index="2"></span>
+            </div>
+            <button class="next-testimonial" aria-label="Next testimonial">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
 
-        <!-- Call to Action Section -->
-        <section class="cta-section">
-            <div class="container">
-                <h2 class="cta-title">Start Your Academic Journey Today</h2>
-                <p class="cta-description">Join thousands of students who are already using IdeaSpark to excel in their projects and assignments.</p>
-                <a href="generate.html" class="btn btn-light">Generate Your First Problem</a>
-            </div>
-        </section>
+      <section class="cta-section">
+        <div class="container">
+          <h2 class="cta-title">Start Your Academic Journey Today</h2>
+          <p class="cta-description">
+            Join thousands of students who are already using IdeaSpark to excel
+            in their projects and assignments.
+          </p>
+          <a href="generate.html" class="btn btn-light"
+            >Generate Your First Problem</a
+          >
+        </div>
+      </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <h2>IdeaSpark</h2>
-                    <p>AI-powered project idea generator for tech and hardware-based projects.</p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h3>Site Map</h3>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="about.html">How It Works</a></li>
-                            <li><a href="generate.html">Generate Ideas</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h3>Account</h3>
-                        <ul>
-                            <li><a href="profile.html">Profile</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h3>Contact</h3>
-                        <ul>
-                            <li><a href="contact.html">Contact Us</a></li>
-                            <li><a href="mailto:support@ideaspark.com">support@ideaspark.com</a></li>
-                        </ul>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <h2>IdeaSpark</h2>
+            <p>
+              AI-powered project idea generator for tech and hardware-based
+              projects.
+            </p>
+          </div>
+
+          <div class="footer-links">
+            <div class="footer-column">
+              <h3>Site Map</h3>
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">How It Works</a></li>
+                <li><a href="generate.html">Generate Ideas</a></li>
+              </ul>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 IdeaSpark. All rights reserved.</p>
+
+            <div class="footer-column">
+              <h3>Account</h3>
+              <ul>
+                <li><a href="profile.html">Profile</a></li>
+              </ul>
             </div>
+
+            <div class="footer-column">
+              <h3>Contact</h3>
+              <ul>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li>
+                  <a href="mailto:support@ideaspark.com"
+                    >support@ideaspark.com</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 IdeaSpark. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="../js/index.js"></script>
     <script>
-        // Testimonials carousel functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const testimonials = document.querySelectorAll('.testimonial-card');
-            const dots = document.querySelectorAll('.dot');
-            const prevButton = document.querySelector('.prev-testimonial');
-            const nextButton = document.querySelector('.next-testimonial');
-            let currentIndex = 0;
-            
-            // Hide all testimonials except the first one
-            testimonials.forEach((testimonial, index) => {
-                if (index !== 0) {
-                    testimonial.style.display = 'none';
-                }
-            });
-            
-            // Function to show testimonial by index
-            const showTestimonial = (index) => {
-                // Hide all testimonials
-                testimonials.forEach(testimonial => {
-                    testimonial.style.display = 'none';
-                });
-                
-                // Remove active class from all dots
-                dots.forEach(dot => {
-                    dot.classList.remove('active');
-                });
-                
-                // Show selected testimonial and activate corresponding dot
-                testimonials[index].style.display = 'block';
-                dots[index].classList.add('active');
-                currentIndex = index;
-            };
-            
-            // Previous button click
-            prevButton.addEventListener('click', () => {
-                let newIndex = currentIndex - 1;
-                if (newIndex < 0) {
-                    newIndex = testimonials.length - 1;
-                }
-                showTestimonial(newIndex);
-            });
-            
-            // Next button click
-            nextButton.addEventListener('click', () => {
-                let newIndex = currentIndex + 1;
-                if (newIndex >= testimonials.length) {
-                    newIndex = 0;
-                }
-                showTestimonial(newIndex);
-            });
-            
-            // Dot clicks
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    showTestimonial(index);
-                });
-            });
+      document.addEventListener("DOMContentLoaded", () => {
+        const testimonials = document.querySelectorAll(".testimonial-card");
+        const dots = document.querySelectorAll(".dot");
+        const prevButton = document.querySelector(".prev-testimonial");
+        const nextButton = document.querySelector(".next-testimonial");
+        let currentIndex = 0;
+
+        testimonials.forEach((testimonial, index) => {
+          if (index !== 0) {
+            testimonial.style.display = "none";
+          }
         });
+
+        const showTestimonial = (index) => {
+          testimonials.forEach((testimonial) => {
+            testimonial.style.display = "none";
+          });
+
+          dots.forEach((dot) => {
+            dot.classList.remove("active");
+          });
+
+          testimonials[index].style.display = "block";
+          dots[index].classList.add("active");
+          currentIndex = index;
+        };
+
+        prevButton.addEventListener("click", () => {
+          let newIndex = currentIndex - 1;
+          if (newIndex < 0) {
+            newIndex = testimonials.length - 1;
+          }
+          showTestimonial(newIndex);
+        });
+
+        nextButton.addEventListener("click", () => {
+          let newIndex = currentIndex + 1;
+          if (newIndex >= testimonials.length) {
+            newIndex = 0;
+          }
+          showTestimonial(newIndex);
+        });
+
+        dots.forEach((dot, index) => {
+          dot.addEventListener("click", () => {
+            showTestimonial(index);
+          });
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
