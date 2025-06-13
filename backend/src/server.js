@@ -54,9 +54,8 @@ app.get("/api/test", (req, res) => {
   });
 });
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../../frontend")));
 
-// Serve HTML pages
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "../../frontend/html/index.html"))
 );
@@ -95,12 +94,12 @@ app.use((req, res) => {
     method: req.method,
     availableRoutes: [
       "GET /",
-      "GET /about",
-      "GET /contact",
-      "GET /generate",
-      "GET /login",
-      "GET /signup",
-      "GET /profile",
+      "GET /about.html",
+      "GET /contact.html",
+      "GET /generate.html",
+      "GET /login.html",
+      "GET /signup.html",
+      "GET /profile.html",
       "GET /api/health",
       "GET /api/test",
       "GET /api/ai/health",
@@ -122,12 +121,12 @@ const server = app.listen(port, () => {
 ╔════════════════════════════════════════╗
 ║         IdeaSpark API Server           ║
 ║                                        ║
-║  Server running on port ${port}         ║
-║  Environment: ${process.env.NODE_ENV || "development"}                ║
-║  Gemini API: ${process.env.GEMINI_API_KEY ? "Configured" : "Missing"}     ║
-║  JWT Secret: ${process.env.JWT_SECRET ? "Configured" : "Missing"}      ║
-║  Database: ${process.env.DATABASE_URL ? "Configured" : "Missing"}        ║
-║  Started: ${new Date().toLocaleString()}        ║
+║  Server running on port ${port}         
+║  Environment: ${process.env.NODE_ENV || "development"}                
+║  Gemini API: ${process.env.GEMINI_API_KEY ? "Configured" : "Missing"}     
+║  JWT Secret: ${process.env.JWT_SECRET ? "Configured" : "Missing"}      
+║  Database: ${process.env.DATABASE_URL ? "Configured" : "Missing"}        
+║  Started: ${new Date().toLocaleString()}        
 ╚════════════════════════════════════════╝
   `);
 
@@ -141,6 +140,7 @@ const server = app.listen(port, () => {
   }
 });
 
+// Graceful shutdown
 process.on("SIGTERM", () => {
   console.log("SIGTERM received, shutting down gracefully");
   server.close(() => {
