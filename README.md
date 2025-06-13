@@ -1,78 +1,96 @@
+# IdeaSpark
 
-### *📌 Project Title:*  
-*AI-Powered Problem Statement Generator for Tech & Hardware-Based Projects*
-
----
-
-### *📁 Project Area:*  
-*Artificial Intelligence*, *Web Development*, *Educational Tools*
+An AI-Powered Problem Statement Generator for Tech & Hardware-Based Projects. IdeaSpark is your one-stop solution for brainstorming, and evolving concepts into realities.
 
 ---
 
-### *🔑 Key Technologies:*
-- *Frontend:* HTML, CSS, JavaScript  
-- *Backend:* Express.js  
-- *AI Integration:* Hugging Face Pretrained Model  
-- *Database:* Prisma ORM PostgreSQL  
-- *Deployment:* Render, Vercel, or Google Cloud Platform  
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
 
 ---
 
-### *📌 Importance of the Decided Project:*
+## Overview
 
-In colleges, students often face difficulties in choosing the right project ideas that match their current skill sets or available hardware resources. This can lead to repetitive, unoriginal, or overly complex projects. Our proposed platform will solve this by using *Artificial Intelligence* to generate *custom, innovative, and feasible project ideas* based on selected inputs. It saves time, inspires creativity, and reduces decision fatigue, especially for beginners or students participating in project-based evaluations and hackathons.
+IdeaSpark is built to simplify project idea generation across domains. Provides real-time, customized, and relevant ideas based on user inputs. Offers secure access, storage, and retrieval of ideas for future reference. Empowers students, educators, and professionals with a smart ideation assistant.
+---
 
-By automating the idea-generation process, this tool empowers students to *focus more on implementation and learning*, rather than getting stuck during the ideation phase.
+## Features
+
+- **AI-Powered Idea Generation**
+  - Integrates Google’s **Gemini 2.0 Flash model** via Vertex AI.
+  - Accepts inputs like domain, language, and hardware stack.
+  - Generates innovative and tailored problem statements in real-time.
+
+- **Secure User Authentication**
+  - Passwords hashed with **Bcrypt**.
+  - Stateless session handling with **JWT**.
+
+- **Smart Prompt Engineering**
+  - Backend builds structured prompts dynamically.
+  - Gemini API processes the prompts for idea generation.
 
 ---
 
-### *🛠 Methodology:*
+## Tech Stack
 
-1. *Frontend Development*:  
-   A responsive web interface using HTML, CSS, and JavaScript for users to:
-   - Select programming languages
-   - Choose hardware components
-   - Enter an optional domain (e.g., healthcare, security)
-
-2. *Backend Setup (Express.js)*:  
-   Receives user input and processes it into a structured prompt.
-
-3. *AI Integration*:  
-   The backend sends the prompt to the model, which returns a relevant project idea (title + description).
-
-4. *Database Integration (Prisma PostgreSQL)*:  
-   - Store generated ideas 
-   - Save "favorite" ideas for logged-in users
-   - Track usage analytics or history
-
-5. *Deployment*:  
-   The complete application will be deployed on platforms like *Render, Vercel, or Google Cloud Platform* for public use.
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL (via Prisma ORM, hosted on NeonDB)
+- **AI:** Google Gemini 2.0 Flash
+- **Authentication & Security:** Bcrypt, JWT
+- **Deployment:** Vercel
 
 ---
 
-### *⚙ Working of the Project:*
+## Installation
 
-1. User visits the website.
-2. Selects:
-   - Preferred programming languages
-   - Optional: hardware components
-   - Optional: project domain
-3. Clicks on *“Generate Idea”*
-4. The input is sent to the backend where:
-   - A prompt is formed using the user’s input
-   - OpenAI API generates 1–3 project ideas
-5. The ideas are displayed on the frontend.
-6. User can:
-   - Save an idea
-   - Regenerate ideas
-   - Export or share the idea
+Follow these steps to get IdeaSpark running locally:
 
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Itz-Sidra/IdeaSpark.git
+   ```
+
+2. **Navigate to the Project Directory**
+
+   ```bash
+   cd IdeaSpark
+   ```
+
+3. **Install Dependencies**
+
+     ```bash
+     npm install
+     ```
+
+4. **Environment Configuration**
+   
+   Create a `.env` file in the root directory and add your keys:
+
+   ```env
+   DATABASE_URL=your-neondb-url
+   JWT_SECRET=your-jwt-secret
+   GEMINI_API_KEY=your-gemini-api-key
+   ```
+
+5. **Database Setup**
+
+   ```bash
+   npx prisma migrate dev --name init
+   npx prisma generate
+   ```
 ---
+## Usage
 
-### * Expected Result from the Project:*
+### Start Development Server
 
-- A fully functional web application that generates *AI-based, context-aware project ideas*.
-- Easy-to-use interface for students across domains.
-- Diverse and unique outputs tailored to specific tech stacks and hardware.
-- Saves time and promotes innovative thinking in academic environments.
-- Future scope for AI fine-tuning, user accounts, project roadmaps, or GitHub integration.
+```bash
+node server.js
+```
+
+Visit: [http://localhost:3000](http://localhost:3000)
