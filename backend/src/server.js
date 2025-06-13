@@ -58,25 +58,25 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Serve HTML pages
 app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/index.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/index.html"))
 );
 app.get("/about", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/about.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/about.html"))
 );
 app.get("/contact", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/contact.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/contact.html"))
 );
 app.get("/generate", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/generate.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/generate.html"))
 );
 app.get("/login", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/login.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/login.html"))
 );
 app.get("/signup", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/signup.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/signup.html"))
 );
 app.get("/profile", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/html/profile.html"))
+  res.sendFile(path.join(__dirname, "../../frontend/html/profile.html"))
 );
 
 app.use((err, req, res, next) => {
