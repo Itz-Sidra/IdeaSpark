@@ -1,6 +1,14 @@
 # IdeaSpark
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-4CAF50?style=for-the-badge&logo=vercel&logoColor=white)](https://ideaspark.onrender.com)
+
 An AI-Powered Problem Statement Generator for Tech & Hardware-Based Projects. IdeaSpark is your one-stop solution for brainstorming, and evolving concepts into realities.
+
+---
+
+## Live Deployment
+
+**Check out the live site here 👉 [https://ideaspark.onrender.com](https://ideaspark.onrender.com)**
 
 ---
 
