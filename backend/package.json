@@ -4,7 +4,10 @@
   "description": "**Project:** *AI-Powered Problem Statement Generator*  \r **Mode:** MVP (Minimum Viable Product)  \r **Stack:** Node.js (Express), JavaScript, Prisma ORM, PostgreSQL",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "postinstall": "prisma generate"
+
   },
   "keywords": [],
   "author": "",
